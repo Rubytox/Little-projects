@@ -1,0 +1,2807 @@
+\documentclass[12pt]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{yhmath}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{stmaryrd}
+
+\usepackage{tikz, tkz-tab}
+
+\setlength{\unitlength}{1mm}
+
+\usepackage[framemethod=TikZ]{mdframed}
+
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+
+\everymath{\displaystyle}
+
+\allowdisplaybreaks
+
+\let\ensembleNombre\mathbb
+\newcommand*\N{\ensuremath{\ensembleNombre{N}}}
+\newcommand*\Z{\ensuremath{\ensembleNombre{Z}}}
+\newcommand*\Q{\ensuremath{\ensembleNombre{Q}}}
+\newcommand*\R{\ensuremath{\ensembleNombre{R}}}
+\newcommand*\C{\ensuremath{\ensembleNombre{C}}}
+\newcommand*\K{\ensuremath{\ensembleNombre{K}}}
+\newcommand*\B{\ensuremath{\mathcal B}}
+
+\newcommand{\app}[5]{\ensuremath{
+\begin{array}[t]{lrcl}
+#1 : & #2 & \longrightarrow & #3 \\
+    & #4 & \longmapsto & #5 \end{array}
+}}
+
+\def\restriction#1#2{\mathchoice
+				{\setbox1\hbox{${\displaystyle #1}_{\scriptstyle #2}$}
+				\restrictionaux{#1}{#2}}
+				{\setbox1\hbox{${\textstyle #1}_{\scriptstyle #2}$}
+				\restrictionaux{#1}{#2}}
+				{\setbox1\hbox{${\scriptstyle #1}_{\scriptscriptstyle #2}$}
+				\restrictionaux{#1}{#2}}
+				{\setbox1\hbox{${\scriptscriptstyle #1}_{\scriptscriptstyle #2}$}
+				\restrictionaux{#1}{#2}}}
+\def\restrictionaux#1#2{{#1\, \smash{\vrule height .8\ht1 depth .85\dp1}}_{\,#2}}
+				
+
+\newcommand{\interieur}[1]{\ensuremath{\overset{\circ\!}{#1}}}
+
+\newcommand{\cste}{\ensuremath{\textbf{constante}}}
+
+\newcommand{\limite}[2]{\ensuremath{\underset{#1 \to #2}{\longrightarrow}}}
+\newcommand{\notlimite}[2]{\ensuremath{\underset{#1 \to #2}{\not\longrightarrow}}}
+\newcommand{\ls}[1]{\ensuremath{\overset{\mathrm{CS}}{\underset{#1}{\longrightarrow}}}}
+\newcommand{\lu}[1]{\ensuremath{\overset{\mathrm{CU}}{\underset{#1}{\longrightarrow}}}}
+\newcommand{\lusts}{\lu{[\; , \;]}}
+
+
+\renewcommand{\th}{\mathrm{th}}
+\newcommand{\sh}{\mathrm{sh}}
+\newcommand{\ch}{\mathrm{ch}}
+
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Sp}{Sp}
+\DeclareMathOperator{\Ima}{Im}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\Inv}{Inv}
+
+\newcommand{\hr}{\begin{center}
+					\line(1,0){150}
+ 				 \end{center}}
+
+\newtheorem*{lemme}{Lemme}
+\newtheorem*{prop}{Propriété}
+\newtheorem*{cor}{Corollaire}
+\theoremstyle{definition}
+\newtheorem*{defi}{Définition}
+\newtheorem{thme}{Théorème}[chapter]
+\newtheorem*{thmefond}{Théorème fondamental}
+\newtheorem*{thmead}{Théorème \textcolor{red}{[admis]}}
+\theoremstyle{remark}
+\newtheorem*{cons}{\textbf{Conséquence}}
+\newtheorem*{conss}{\textbf{Conséquences}}
+\newtheorem*{rem}{\textbf{Remarque}}
+\newtheorem*{rems}{\textbf{Remarques}}
+\newtheorem*{ex}{\textbf{Exemple}}
+\newtheorem*{exs}{\textbf{Exemples}}
+\newtheorem*{cex}{\textbf{Contre-exemple}}
+\newtheorem*{cexs}{\textbf{Contre-exemples}}
+
+\newenvironment{fdef}
+  {\begin{mdframed}[roundcorner=10pt, linewidth=1pt]\begin{defi}}
+  {\end{defi}\end{mdframed}}
+ 
+\newenvironment{fthme}
+  {\begin{mdframed}[roundcorner=10pt, linewidth=2pt]\begin{thme}}
+  {\end{thme}\end{mdframed}}
+  
+\newenvironment{fthmefond}
+  {\begin{mdframed}[roundcorner=10pt, linewidth=3.5pt]\begin{thmefond}}
+  {\end{thmefond}\end{mdframed}}
+  
+\newenvironment{fthmead}
+  {\begin{mdframed}[roundcorner=10pt, linewidth=2pt]\begin{thmead}}
+  {\end{thmead}\end{mdframed}}
+  
+\title{\Huge{\underline{\textbf{Deuxième année de CPGE}}} \\ \underline{\textbf{Mathématiques}}}
+\author{\Large{Christophe \bsc{Néraud}}}
+\date{Année 2017 -- 2018}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\chapter{Réduction des matrices carrées}
+
+Dans ce chapitre, on notera $\K$ un sous-corps de $\C$ : en général, $\C$, $\R$ ou $\Q$. $E$ sera un $\K$-espace vectoriel non réduit à 0 quelconque.
+
+\section{Éléments propres}
+	\subsection{Définitions de base}
+	
+	Soit $u \in \mathcal L(E)$ et $\lambda \in \K$. On considère l'équation d'inconnue $x \in E$ :	
+	\[\boxed{(\mathcal P_{u,\lambda}) \; : \; u(x) = \lambda x \;}\]
+			
+	\begin{fdef}[Valeurs propres, vecteurs propres, sous-espaces propres] \mbox{~}
+	
+	
+	On dit que $\lambda$ est \textbf{valeur propre} de $u$ si $(\mathcal P_{u,\lambda})$ possède des solutions non nulles. 
+	
+	Dans ce cas, les $x \in E \setminus \lbrace 0 \rbrace$ tels que $u(x) = \lambda x$ sont les \textbf{vecteurs propres} de $u$ associés à $\lambda$, et l'ensemble des $x \in E$ tels que $u(x) = \lambda x$ (y compris 0) est le \textbf{sous-espace propre} de $u$ associé à $\lambda$. On le note $E_\lambda(u)$ ou $E_\lambda$.
+	\end{fdef}
+	
+	\begin{rems} \mbox{~} \\
+		\begin{itemize}
+		\item Un vecteur propre est associé à une seule valeur propre. En effet, si $x \neq 0$ et $\lambda x = \mu x$, alors $\lambda = \mu$.
+		
+		Cette propriété s'écrit également : si $\lambda \neq \mu$, alors $E_\lambda \cap E_\mu = \lbrace 0 \rbrace$.
+		\item $(\mathcal P_{u,\lambda} )$ s'écrit aussi : $u(x) - \lambda x = 0$, ou encore :
+		
+		\[ \boxed{ (u - \lambda \id)(x) = 0 } \]
+		
+		L'ensemble des solutions de cette équation est donc : $\ker (u - \lambda \id)$. Ainsi, $\lambda$ est valeur propre de $u$ si, et seulement si, $u - \lambda\id$ n'est \textbf{pas} injective. Dans ce cas, on obtient :
+		
+		\[ \boxed{ E_\lambda(u) = \ker (u - \lambda\id) } \]
+		
+		On constate que $E_\lambda$ est donc bien un sous-espace vectoriel de $E$.
+		\end{itemize}
+	\end{rems}
+	
+	\begin{fdef}[Spectre] \mbox{~} \\
+	L'ensemble des valeurs propres de $u$ est le \textbf{spectre} de $u$, noté $\Sp(u)$. En particulier, on a $\Sp(u) \subset \K$, et :
+	\[\Sp(u) = \lbrace \lambda \in \K \;|\; \exists x \in E \setminus \lbrace 0 \rbrace, u(x) = \lambda x \rbrace\]
+	\end{fdef}
+	
+	\begin{ex}[Les éléments propres de la dérivation] \mbox{~}\\
+	\begin{itemize}
+	\item[\underline{1ère version :}] Sur les polynômes formels.
+	
+	Soit $\app{D}{\K[X]}{\K[X]}{P}{D(P) = P'}$. 
+	
+	Alors : $(\mathcal P_{D, \lambda} ) : P' = \lambda P$. Or si $\lambda \neq 0$ et $P \neq 0$, alors $\deg (\lambda P) = \deg(P)$, \textbf{et} $\deg(P') < \deg(P)$. Ainsi, l'égalité est impossible. On a donc :
+		\begin{itemize}
+		\item si $\lambda \neq 0$, alors $\lambda \not\in \Sp(D)$,
+		\item si $\lambda = 0$, alors l'équation devient $P' = 0$, dont les solutions sont les polynômes constants.
+		\end{itemize}
+		
+		On en déduit :
+		$\begin{cases}
+		\Sp(D) &= \lbrace 0 \rbrace \\
+		E_0(D) &= \K_0[X] = \K \\
+		\end{cases}$
+		
+	\item[\underline{2ème version :}] Sur les fonctions.
+	
+	Soit $I$ un intervalle de $\R$ et $E = \mathcal C^{\infty} (I, \K)$. On considère l'application $\app{D}{E}{E}{f}{D(f) = f'}$.
+	
+	Alors : $(\mathcal P_{D, \lambda}) : f' = \lambda f$, et a pour solutions les fonctions de la forme $t \mapsto ce^{\lambda t}$, $c \in \K$.
+	
+	On en déduit : 
+	$\begin{cases}
+	\Sp(D) &= \K \\
+	\forall \lambda \in \K,\; E_\lambda(D) &= \mathrm{Vect}(t \mapsto e^{\lambda t}) \\
+	\end{cases}$
+	\end{itemize}
+	\end{ex}
+	
+	\subsection{Premières propriétés}
+	
+	\begin{fthme} \mbox{~}\\
+	Soit $u \in \mathcal L(E)$ et $\lambda_1, \ldots, \lambda_p$ des valeurs propres de $u$ toutes distinctes. Pour $i \in \llbracket 1, p \rrbracket$, on pose $E_i = E_{\lambda_i}(u)$. Alors :	
+	\begin{center}
+	\textbf{La famille $\mathbf{(E_i)_{1 \leq i \leq p}}$ est en somme directe.}
+	\end{center}
+	\end{fthme}
+	
+	\begin{proof}
+	Par récurrence sur $p$.
+	
+	\begin{itemize}
+	\item \underline{$p = 2$} : On le sait déjà, car $E_1 \cap E_2 = \lbrace 0 \rbrace$.
+	\item \underline{$p \to p+1$} : On suppose que $\sum_{i=1}^p x_i \overset{(*)}{=} 0, \; x_i \in E_i$. On veut montrer que : $\forall i \in \llbracket 1, p \rrbracket,\; x_i = 0$.
+	
+	On applique $u$ à $(*)$ : $\sum_{i=1}^p u(x_i) = 0$, donc $\sum_{i=1}^p \lambda_i x_i \overset{(**)}{=} 0$. La combinaison linéaire $(**) - \lambda_p (*)$ donne : 	
+	\[ \sum_{i=1}^{p-1} \underbrace{(\lambda_i - \lambda_p) x_i}_{\in E_i} = 0 \]
+	
+	Par hypothèse de récurrence, les $E_i$ sont en somme directe, donc $\forall i \in \llbracket 1, p-1 \rrbracket,\;(\lambda_i - \lambda_p) x_i = 0$. Or $\lambda_i - \lambda_p \neq 0$, donc $\forall i \in \llbracket 1, p-1 \rrbracket, \; x_i = 0$. Enfin, par $(*)$, $x_p = 0. \qedhere$
+	\end{itemize}
+	\end{proof}
+	
+	\begin{cor} \mbox{~}\\
+	Soit $\lambda_1, \ldots, \lambda_p$ des valeurs propres distinctes de $u$. Pour chaque $i \in \llbracket 1, p \rrbracket$, soit $x_i$ un vecteur propre associé à $\lambda_i$. Alors :
+	\begin{center}
+	La famille $(x_i)_{1 \leq i \leq p}$ est libre.
+	\end{center}
+	\end{cor}
+	
+	\begin{proof}
+	Supposons $\sum_{i=1}^p \alpha_i x_i = 0, \; \alpha_i \in \K$. On veut montrer que $\forall i \in \llbracket 1, p \rrbracket, \; \alpha_i = 0$. Or $x_i \in E_i$, donc $\alpha_i x_i \in E_i$. Donc par le théorème précédent, $\forall i \in \llbracket 1, p \rrbracket, \; \alpha_i x_i = 0$. Or $x_i$ est un vecteur propre donc $x_i \neq 0$. Donc $\forall i \in \llbracket 1, p \rrbracket, \; \alpha_i = 0$.
+	\end{proof}
+	
+	\begin{cons}
+	Si $\dim E = n$, $u$ possède au plus $n$ valeurs propres.
+	\end{cons}
+	
+	Reprenons maintenant l'exemple de la dérivation, version 2. On note pour $\lambda \in \K$, $\app{e_\lambda}{I}{\K}{t}{e^{\lambda t}}$. Alors, $e_\lambda$ est un vecteur propre de $D$ pour la valeur propre $\lambda$. Donc, la famille $(e_\lambda)_{\lambda \in \K}$ est libre.
+
+	\subsection{Sous-espaces stables}
+	
+	Soit $u \in \mathcal L(E)$ et $F$ un sous-espace vectoriel de $E$. On dit que $F$ est \textbf{stable} par $u$ si, et seulement si, $u(F) \subset F$. Dans ce cas, on peut définir l'endomorphisme de $F$ \textbf{induit} par $u$ :	
+	\begin{center}
+	$\app{u_F}{F}{F}{x}{u(x)}$
+	\end{center}
+	
+	\paragraph{Interprétation matricielle : } Ici, $\dim E = n$ et $\dim F = p$. Soit $\mathcal B = \wideparen{\mathcal B_1 \mathcal C}$ une base de $E$ adaptée à $F$. Soit $A = \Mat_{\mathcal B} (u)$. Alors, $F$ est stable par $u$ si, et seulement si, A est de la forme :
+	\[A = \begin{pmatrix}
+	A_1 & * \\
+	0 & *
+	\end{pmatrix},\]
+	
+	où $A_1 = \Mat_{\mathcal B_1} (u_F)$ est une matrice de taille $p$.
+	
+	\paragraph{Retour aux éléments propres : } Soit $x \in E \setminus \lbrace 0 \rbrace$. Alors :
+	\begin{align*}
+	x \text{ est vecteur propre de } u \;&\Longleftrightarrow \;\exists \lambda \in \K, \; u(x) = \lambda x \\
+	&\Longleftrightarrow \; u(x) \in \mathrm{Vect}(x) \\
+	&\Longleftrightarrow \; \mathrm{Vect}(x) \text{ est stable par } u \\
+	&\Longleftrightarrow \; \forall y \in \mathrm{Vect}(x), \; u(y) \in \mathrm{Vect}(x)
+	\end{align*}
+
+	On en déduit l'équivalence suivante : 	
+	\[ \boxed{ x \text{ est vecteur propre de } u \;\Longleftrightarrow\; \mathrm{Vect}(x) \text{ est stable par } u } \]
+	
+	\begin{prop}
+	Soit $(u,v) \in \mathcal L(E)^2$ tels que $u \circ v = v \circ u$. Alors, les sous-espaces propres de $u$ sont stables par $v$.
+	\end{prop}
+	\begin{proof}
+	Soit $\lambda \in \Sp(u)$ et $x \in E_\lambda(u)$. On veut montrer que $v(x) \in E_\lambda(u)$. Alors :
+	\begin{align*}
+	u(v(x)) = v(u(x)) = v(\lambda x) = \lambda v(x)
+	\end{align*}
+	Ainsi, $(u \circ v)(x) = \lambda v(x)$, donc $v(x) \in E_\lambda(u)$.
+	\end{proof}
+	
+	\begin{rems} \mbox{~}\\
+	\begin{itemize}
+	\item En particulier, $\ker(u)$ est stable par $v$.
+	\item On a aussi $\Ima(u)$ stable par $v$.
+		\begin{proof}
+		Soit $y \in \Ima(u)$. Il existe $x \in E$ tel que $y = u(x)$. Donc $v(y) = v(u(x)) = u(v(x)) \in \Ima(u)$.
+		\end{proof}
+	\end{itemize}
+	\end{rems}
+	
+	\subsection{Éléments propres des matrices carrées}
+	Dans cette partie, on redéfinit les concepts évoqués précédemment, mais dans le cas d'une matrice carrée.
+	
+	Soit $A \in \mathcal M_n(\K)$ et $\lambda \in \K$. On considère l'équation d'inconnue $X \in \mathcal M_{n, 1}(\K)$ suivante :
+	\[\boxed{(\mathcal P_{A,\lambda}) \; : \; AX = \lambda X \;}\]
+	
+	On définit les concepts de valeur propre, vecteur propre, couple propre, sous-espace propre et spectre de manière évidente.
+	
+	\begin{rems} \mbox{~}\\
+	\begin{itemize}
+	\item L'équation $(\mathcal P_{A, \lambda})$ est équivalente à $(A - \lambda I_n)X = 0$. Ainsi, $\lambda$ est valeur propre de $A$ si, et seulement si, $A - \lambda I_n$ n'est \textbf{pas} inversible.
+	
+	\textbf{Cas particuliers :} Si $T$ est triangulaire, alors $\Sp(T) = \lbrace t_{1,1}, t_{2,2}, \ldots, t_{n,n} \rbrace$, avec des notations évidentes.
+	
+	\item Les éléments propres de $A$ dépendent du choix du corps de base. En effet, si $A \in \mathcal M_n(\K)$ et si $\K \in \mathbb{L}$, on a aussi $A \in \mathcal M_n(\mathbb L)$. On aura alors $\Sp_{\K}(A) \subset \Sp_{\mathbb L}(A)$, et général pas égalité.
+	\end{itemize}
+	\end{rems}
+	
+	\paragraph{Lien avec les endomorphismes :}
+	\begin{itemize}
+	\item Soit $E$ un $\K$ espace vectoriel de dimension $n$, $\mathcal B$ une base de $E$, et $u \in \mathcal L(E)$. On note $A = \Mat_{\mathcal B}(u) \in \mathcal M_n(\K)$, et on représente $x \in E$ par $X = \Mat_{\mathcal B}(x) \in \mathcal M_{n,1}(\K)$.
+	
+	Alors, $AX = \Mat_{\mathcal B}(u(x))$, donc : $\boxed{ u(x) = \lambda x \Longleftrightarrow AX = \lambda X. }$
+	
+	Dans ce cas, $\boxed{ \Sp(u) = \Sp_\K(A).}$
+	
+	\item Soit $A \in \mathcal M_n(\K)$. On note $u_A$ l'endomorphisme de $\K^n$ canoniquement associé à $A$, et $\mathcal C$ la base canonique de $\K^n$. Alors $\Sp(u_A) = \Sp_\K(A)$ et le vecteur $x = (x_1, x_2, \ldots, x_n) \in \K^n$ est représenté dans $\mathcal C$ par la matrice colonne : $X = \begin{pmatrix} x_1 \\ \vdots \\ x_n \end{pmatrix}$. Ainsi, les vecteurs propres de $A$ sont les images des vecteurs propres de $u_A$ par l'isomorphisme de $\K^n$ dans $\mathcal M_{n,1}(\K)$ qui au $n$-uplet $(x_1, \ldots, x_n)$ associé la matrice colonne $\begin{pmatrix} x_1 \\ \vdots \\ x_n \end{pmatrix}$.
+	
+	Si on identifie $\K^n$ et $\mathcal M_{n,1}(\K)$, les vecteurs propres de $A$ et de $u_A$ sont identiques, et de même pour les sous-espaces propres associés.
+	\end{itemize}
+	
+	\section{Polynôme caractéristique}
+	\subsection{Cas d'une matrice carrée}
+	
+	\begin{fdef}[Polynôme caractéristique] \mbox{~}\\
+	Soit $A \in \mathcal M_n(\K)$. Le polynôme caractéristique de $A$ est :	
+	\[
+	\boxed{\chi_A = \det(XI_n - A)} = \begin{vmatrix}
+										X - a_{1,1} & -a_{1,2} & \cdots & -a_{1,n} \\
+										-a_{2,1} & X - a_{2,2} & \cdots & \vdots \\
+										\vdots   & \cdots      & \ddots & \vdots \\
+										-a_{n,1} & \cdots      & \cdots & X - a_{n,n}
+									  \end{vmatrix}
+	\]
+	
+	À priori, $\chi_A \in \K[X]$.
+	\end{fdef}
+	
+	\begin{fthme}[Expression du polynôme caractéristique] \mbox{~}\\
+	\[\boxed{ \chi_A = X^n - (\Tr A)X^{n-1} + \cdots + (-1)^n \det A }\]
+	
+	En particulier, $\chi_A$ est unitaire de degré $n$.
+	\end{fthme}
+	\begin{proof}
+	On note $P_{i,j}$ le coefficient $(i,j)$ de $XI_n - A$. Alors $P_{i,j} = \begin{cases}
+	X - a_{i,i} & \text{ si } i = j \\
+	-a_{i,j} & \text{ si } i \neq j
+	\end{cases}$.
+	
+	Donc $\chi_A = \sum_{\sigma \in \mathfrak S_n}\left( \varepsilon(\sigma) \underbrace{\prod_{i=1}^n P_{i, \sigma(i)}}_{= Q_{\sigma}}  \right)$. Or $\deg P_{i,j} < 1$ donc $\deg Q_\sigma \leq n$, donc $\deg \chi_A \leq n$.
+	
+	Si $\sigma \neq \id$, il existe au moins deux valeurs de $i$ telles que $i \neq \sigma(i)$, et il existe au moins deux valeurs de $i$ telles que $P_{i, \sigma(i)}$ est constant. Alors $\deg Q_\sigma \leq n-2$.
+	
+	Donc les termes de degré $n$ et $n-1$ de $\chi_A$ sont ceux de $Q_{\id}$. Or $Q_{\id} = \prod_{i=1}^n P_{i,i} = \prod_{i=1}^n (X - a_{i,i}) = X^n - \left( \sum_{i=1}^n a_{i,i} \right) X^{n-1} + \cdots = X^n - (\Tr A)X^{n-1} + \cdots$
+	
+	Pour le terme constant, voir le théorème suivant.
+	\end{proof}
+	
+	\begin{fthme}
+	$ \forall \lambda \in \K,\; \boxed{ \chi_A(\lambda) = \det (\lambda I_n - A) }$
+	\end{fthme}
+	\begin{proof}
+	Le coefficient $(i,j)$ de $\lambda I_n - A$ est $P_{i,j}(\lambda)$. Alors :
+	\begin{align*}
+	\det(\lambda I_n - A) &= \sum_{\sigma \in \mathfrak S_n} \left( \varepsilon(\sigma) \prod_{i=1}^n P_{i, \sigma(i)}(\lambda) \right) \\
+	&= \sum_{\sigma \in \mathfrak S_n} \left( \varepsilon(\sigma) \left(\prod_{i=1}^n P_{i, \sigma(i)}\right)(\lambda) \right) \\
+	&= \left[ \sum_{\sigma \in \mathfrak S_n} \left( \varepsilon(\sigma)\prod_{i=1}^n P_{i, \sigma(i)} \right)\right](\lambda) \\
+	&= \chi_A(\lambda)\qedhere
+	\end{align*}
+	\end{proof}
+	
+	\begin{fthme}
+	$ \lambda \text{ est valeur propre de } A \; \Longleftrightarrow\; \chi_A(\lambda) = 0 $
+	\end{fthme}
+	\begin{proof}
+		\begin{align*}
+		\lambda \text{ est valeur propre de } A \; &\Longleftrightarrow\; A - \lambda I_n \text{ non inversible}\\
+		&\Longleftrightarrow \; \lambda I_n - A \text{ non inversible} \\
+		&\Longleftrightarrow \; \det(\lambda I_n - A) = 0 \\
+		&\Longleftrightarrow \; \chi_A(\lambda) = 0\qedhere
+		\end{align*}
+	\end{proof}
+	
+	\begin{rem}
+	Plus précisément, $\Sp_\K(A)$ est l'ensemble des racines de $\chi_A$ dans $\K$.
+	\end{rem}
+	\begin{conss} \mbox{~}\\
+		\begin{itemize}
+		\item[1)] $A$ possède au plus $n$ valeurs propres.
+		\item[2)] $A$ possède au moins une valeur propre dans $\C$ (théorème de d'Alembert-Gauss).
+		\item[3)] Si $A \in \mathcal M_n(\R)$ et si $n$ est impair, alors $A$ possède au moins une valeur propre réelle.
+		\end{itemize}
+	\end{conss}
+	
+	\subsection{Cas particuliers}
+	\paragraph{Taille 2 : } Soit $A \in \mathcal M_2(\K)$. Alors $\boxed{\chi_A = X^2 - (\Tr A)X + \det A.}$
+	
+	\paragraph{Taille 3 : } Soit $A \in \mathcal M_3(\K)$. Par la règle de Sarrus, on trouve facilement le coefficient devant X, et on en déduit : $ \boxed{ \chi_A = X^3 - (\Tr A)X^2 + (\Tr \widetilde A)X - \det A.} $
+	
+	\paragraph{Matrices triangulaires : } Soit $T$ une matrice triangulaire. Alors $XI_n - T$ est triangulaire aussi, et avec pour coefficients diagonaux les $X - t_{i,i}$. Alors : $ \boxed{ \chi_T = \prod_{i=1}^n \left( X - t_{i,i} \right) .}$
+	
+	\subsection{Compléments}
+	\begin{prop}
+	Si $A \sim_S B$, alors $\chi_A = \chi_B$.
+	\end{prop}
+	\begin{proof}
+	En effet, $ B = P^{-1}AP$ avec $P \in GL_n(\K)$, donc $XI_n - B = P^{-1} (XI_n - A)P$, donc $\det(XI_n - B) = \det (P^{-1}) \det (XI_n - A) \det (P) = \det (XI_n - A).\qedhere$
+	\end{proof}
+	
+	\begin{prop}
+	$\chi_{A^\top} = \chi_A.$
+	\end{prop}
+	\begin{proof}
+	En effet, $XI_n$ est symétrique, donc : $XI_n - A^\top = (XI_n - A)^\top$, donc :
+	\[\det [XI_n - A^\top] = \det [ (XI_n - A)^\top] = \det (XI_n - A)\qedhere\] 
+	\end{proof}
+	
+	\begin{fdef}[Ordre de multiplicité] \mbox{~}\\
+	L'ordre de multiplicité d'une valeur propre $\lambda$ de $A$ est son ordre en tant que racine de $\chi_A$, noté $\omega(\lambda)$. Ainsi :
+	\begin{align*}
+	\omega(\lambda) = r \; &\Longleftrightarrow \;	\begin{cases} 
+													(X - \lambda)^r | \chi_A \\
+													(X - \lambda)^{r+1} \not | \chi_A
+													\end{cases} \\
+	&\Longleftrightarrow \; \chi_A = (X - \lambda)^rQ \text{ avec } Q(\lambda) \neq 0
+	\end{align*}
+	\end{fdef}
+	
+	\begin{ex}
+	Pour une matrice triangulaire, $\chi_A = \prod_{i=1}^n (X - t_{i,i})$, donc l'ordre d'une valeur propre $\lambda$ est le nombre de $i$ tels que $t_{i,i} = \lambda$, autrement dit : le nombre d'occurrences de $\lambda$ sur la diagonale.
+	\end{ex}
+	\begin{rem}
+	On sait que $\chi_A$ est toujours scindé dans $\C[X]$. Alors : la somme des ordres des valeurs propres de $A$ \textbf{dans $\C$} est toujours égale à $n$.
+	\end{rem}
+	
+	\begin{prop}
+	Soit $\lambda_1, \ldots, \lambda_n$ les valeurs propres de $A$ dans $\C$ répétées suivant leur ordre. On a : 
+	\[ \boxed{ \sum_{i=1}^n \lambda_i = \Tr A } \qquad \mathrm{ et } \qquad \boxed{ \prod_{i=1}^n \lambda_i = \det A }\]
+	\end{prop}
+	\begin{proof}
+	Factorisation de $\chi_A$ dans $\C[X]$ : 
+	\begin{align*}
+	\chi_A &= \prod_{i=1}^n (X - \lambda_i) \\
+	&= X^n - \left(\sum_{i=1}^n \lambda_i \right) X^{n-1} + \cdots + (-1)^n \prod_{i=1}^n \lambda _i
+	\end{align*}
+	
+	On identifie avec l'expression précédente de $\chi_A$, d'où le résultat.
+	\end{proof}
+	
+	\subsection{Cas d'un endomorphisme (en dimension finie)}
+	Soit $E$ un $\K$ espace vectoriel de dimension $n$ et $u \in \mathcal L(E)$. Les matrices de $u$ dans les diverses bases de $E$ sont toutes semblables, donc ont le même polynôme caractéristique.
+	
+	\begin{fdef}[Polynôme caractéristique] \mbox{~}\\
+	Soit $\mathcal B$ une base quelconque de $E$, alors :
+	\[ \boxed{ \chi_u = \chi_{ \Mat_{\mathcal B}(u) }}\]
+	\end{fdef}
+	
+	\begin{conss} \mbox{~}\\
+		\begin{itemize}
+		\item $\chi_u = X^n - (\Tr u)X^{n-1} + \cdots + (-1)^n \det u$.
+		\item Si $A = \Mat_{\mathcal B}(u)$, alors $\lambda I_n - A = \Mat_{\mathcal B} (\lambda \id - u)$. Donc $\chi_u(\lambda) = \chi_A(\lambda) = \det (XI_n - A)$. Alors $\chi_u(\lambda) = \det(\lambda \id - u)$. D'où : $\Sp(u) = \lbrace \lambda \in \K \;|\; \chi_u(\lambda) = 0 \rbrace.$
+		\end{itemize}
+	\end{conss} \pagebreak
+	
+	\begin{fdef}[Ordre de multiplicité] \mbox{~}\\
+	Soit $\lambda \in \Sp(u)$. L'ordre de $\lambda$ est son ordre en tant que racine de $\chi_u$. La somme des valeurs propres de $u$ est inférieure à $n$. Si $\K = \C$, elle est égale à $n$.
+	\end{fdef}
+	
+	\begin{fthme}\mbox{~}\\
+	Si $F$ est stable par $u$, alors : $\boxed{ \chi_{u_F} \;|\; \chi_u .}$
+	\end{fthme}
+	\begin{proof}
+	Soit $p = \dim F$ et $\mathcal B = \wideparen{\mathcal B_1 \mathcal C}$ une base de $E$ adaptée à $F$. Soit $A = \Mat_{\mathcal B}(u)$. On sait que $A = \begin{pmatrix} A_1 & * \\ 0 & C \end{pmatrix}$, où $A_1 = \Mat_{\mathcal B_1}(u_F)$.
+	
+	Donc $XI_n - A = \begin{pmatrix} XI_p - A_1 & * \\ 0 & XI_{n-p} - C \end{pmatrix}$. Donc :
+	\begin{align*}
+	\chi_u = \chi_A &= \det(XI_n - A) \\
+	&= \det(XI_p - A_1) \det(XI_{n-p} - C) \\
+	&= \chi_{A_1} \det (XI_{n-p} - C) \\
+	&= \chi_{A_1}\chi_C \qedhere
+	\end{align*}
+	\end{proof}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $\lambda \in \Sp(u)$. On a : $\boxed{ \dim E_\lambda \leq \omega(\lambda).}$
+	\end{fthme}
+	
+	\begin{proof}
+	On pose $d(\lambda) = \dim E_\lambda$. On applique le premier théorème à $E_\lambda$, stable par $u$.
+	
+	Alors $u_{E_\lambda} = \lambda \id_{E_\lambda}$, l'homothétie de rapport $\lambda$. Alors $\chi_{u_{E_\lambda}} = (X - \lambda)^{d(\lambda)}$. Donc par le théorème précédent, $(X - \lambda)^{d(\lambda)} \; | \; \chi_u$, d'où $d(\lambda) \leq \omega(\lambda)$.
+	\end{proof}		
+	
+	\paragraph{Cas particulier : } Si $\lambda$ est une valeur propre simple, $E_\lambda$ est une droite vectorielle.
+	
+	\section{Polynômes d'endomorphismes et de matrices}
+	\subsection{Structure d'algèbre}
+	\begin{fdef}[Algèbre] \mbox{~}\\
+	Une $\K$-algèbre est un ensemble muni de trois lois $+, *, \cdot$ telles que :
+	\begin{itemize}
+	\item[1)] $(A, +, *)$ est un anneau.
+	\item[2)] $(A, +, \cdot)$ est un $\K$-espace vectoriel.
+	\item[3)] $\forall (x,y) \in A^2,\; \forall \lambda \in \K,\; (\lambda \cdot x) * y = x * (\lambda \cdot y) = \lambda \cdot (x * y)$.
+	\end{itemize}
+	\end{fdef}
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item L'algèbre $A$ est commutative lorsque $*$ l'est.
+	\item La multiplication interne $(x,y) \mapsto x * y$ est bilinéaire.
+	\end{itemize}
+	\end{rems} \pagebreak
+	
+	\begin{exs}[de référence]\mbox{~}\\
+	\begin{itemize}
+	\item $\mathcal F(X, \K)$ où $X$ est un ensemble quelconque.
+	\item $\K[X]$ l'algèbre des polynômes formels.
+	\item $\mathcal M_n(\K)$ l'algèbre des matrices carrées.
+	\item $(\mathcal L(E), +, \circ, \cdot)$ où $E$ est un $\K$-espace vectoriel.
+	\end{itemize}
+	\end{exs}
+	
+	\begin{fdef}[Sous-algèbre] \mbox{~}\\
+	Soit $(A, +, *, \cdot)$ une $\K$-algèbre, et $B\subset A$. Alors $B$ est une sous-algèbre de $A$ si, et seulement si, $(B, +, *)$ est un sous-anneau de $(A, +, *)$ et un sous-espace vectoriel de $(A, +, \cdot)$. Ce qui revient à :
+	\begin{itemize}
+	\item[1)] $\forall (x,y) \in B^2,\; \forall (\lambda, \mu) \in \K^2, \; \lambda x + \mu y \in B.$
+	\item[2)] $\forall (x,y) \in B^2,\; x * y \in B.$
+	\item[3)] $1_A \in B$.
+	\end{itemize}
+	\end{fdef}
+	
+	\begin{exs} \mbox{~}\\
+	\begin{itemize}
+	\item $\mathrm{TS}_n(\K)$ est une sous-algèbre de $\mathcal M_n(\K)$.
+	\item Soit $I$ un intervalle de $\R$, alors $\mathcal C(I, \R)$ est une sous-algèbre de $\mathcal F(I, \R)$.
+	\end{itemize}
+	\end{exs}
+	
+	\begin{fdef}[Morphisme d'algèbres] \mbox{~}\\
+	Soit $(A, +, *, \cdot)$ et $(B, +, *, \cdot)$ deux $\K$-algèbres. Une application $f \; : \; A \to B$ est un morphisme d'algèbres si, et seulement si, $f$ est un morphisme d'anneaux et un morphisme d'espaces vectoriels. C'est en fait une application linéaire. Ce qui revient à :
+	\begin{itemize}
+	\item[1)] $\forall (x,y) \in A^2,\; \forall (\lambda, \mu) \in \K^2, \; f(\lambda x + \mu y) = \lambda f(x) + \mu f(y).$
+	\item[2)] $\forall (x,y) \in A^2,\; f(x * y) = f(x) * f(y).$
+	\item[3)] $f(1_A) = 1_B.$
+	\end{itemize}
+	\end{fdef}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item Soit $A = \mathcal F(X, \K)$ et $x_0 \in X$ fixé. L'évaluation $\app{\mathrm{ev}_{x_0}}{A}{\K}{f}{f(x_0)}$ est un morphisme d'algèbres.
+	\item Soit $P \in GL_n(\K)$ fixé. L'application $\app{}{\mathcal M_n(\K)}{\mathcal M_n(\K)}{M}{P^{-1}MP}$ est un automorphisme d'algèbre.
+	\end{itemize}
+	\end{exs}
+	
+	\subsection{Action d'un polynôme sur une algèbre}
+	Soit $(A, +, *, \cdot)$ une $\K$-algèbre, $P = \sum_{k=0}^n \alpha_kX^k$ un polynôme et $a \in A$. On pose : $P(a) = \sum_{k=0}^n \alpha_k a^k$.
+	
+	\begin{rem}
+	Soit $E$ un $\K$-espace vectoriel de dimension finie, alors si $M = \Mat_{\mathcal B}(u)$, on a $P(M) = \Mat_{\mathcal B} P(u)$.
+	\end{rem}
+	
+	\begin{fthmefond}
+	Soit $a \in A$ où $A$ est une $\K$-algèbre non supposée commutative. Alors, l'application $\app{\phi_a}{\K[X]}{A}{P}{P(a)}$ est un morphisme d'algèbre.
+	\end{fthmefond}
+	
+	Autrement dit, on a : $\begin{cases}
+							(\lambda P + \mu Q)(a) = \lambda P(a) + \mu Q(a) \qquad &(1)\\
+							(PQ)(a) = P(a)*Q(a) = Q(a)*P(a) \qquad &(2)\\
+							1(a) = 1_A \qquad &(3)
+					       \end{cases}$
+	\begin{proof}
+	(3) est trivial : $\alpha_0 = 1$ et $\alpha_k = 0$ pour $k \geq 1$.
+	
+	Pour (1) : $P = \sum_{k=0}^m \alpha_k X^k$ et $Q = \sum_{k=0}^n \beta_k X^k$. Le résultat vient de la linéarité de la somme.
+	
+	Pour (2) : Avec les mêmes notations, on a $PQ = \sum_{(i,j) \in \llbracket 0, m \rrbracket \times \llbracket 0, n \rrbracket} \alpha_i \beta_j X^{i+j}$. Ainsi : $PQ(a) = \sum_{(i,j) \in \llbracket 0, m \rrbracket \times \llbracket 0, n \rrbracket} \alpha_i \beta_j a^{i+j} = \sum_{(i,j) \in \llbracket 0, m \rrbracket \times \llbracket 0, n \rrbracket} \alpha_i \beta_j a^i*a^j = \left( \sum_{i=0}^m \alpha_i a^i \right) * \left( \sum_{j=0}^n \beta_j a^j \right) = P(a) * Q(a).$
+	\end{proof}
+	
+	\paragraph{Réécriture des formules (1), (2) et (3) dans les cas du programme : }
+		\subparagraph{$\bm{A = \mathcal L(E)}$}
+		\[\begin{cases}
+			(\lambda P + \mu Q)(u) = \lambda P(u) + \mu Q(u) \qquad &(1)\\
+			(PQ)(u) = P(u)\circ Q(u) = Q(u)\circ P(u) \qquad &(2)\\
+			1(u) = \id \qquad &(3)
+       \end{cases}\]
+       
+       \subparagraph{$\bm{A = \mathcal M_p(\K)}$}
+       \[\begin{cases}
+			(\lambda P + \mu Q)(M) = \lambda P(M) + \mu Q(M) \qquad &(1)\\
+			(PQ)(M) = P(M)Q(M) = Q(M)P(M) \qquad &(2)\\
+			1(M) = I_p \qquad &(3)
+       \end{cases}\]
+       
+\hr
+       
+	On pose $\K[a] = \lbrace P(a) \;|\; P \in \K[X] \rbrace$. D'après les formules du théorème fondamental, $\K[a]$ est une \textbf{sous-algèbre commutative de $A$}. Mieux, c'est même la plus petite sous-algèbre qui possède $a$.
+	
+	\subsection{Polynômes annulateurs}
+	On reprend la fonction $\phi_a$ du théorème fondamental. Alors, $\ker \phi_a = \lbrace P \in \K[X] \;|\; P(a) = 0_A \rbrace$, c'est donc l'ensemble des polynômes annulateurs de $a$.
+	
+	\begin{fdef}[Idéal]\mbox{~}\\
+	Soit $I$ un sous-espace vectoriel d'un espace vectoriel $E$. $I$ est un idéal de $E$ si, et seulement si, $I$ est absorbant pour la multiplication i.e. $\forall (x,y) \in I \times E, \; x*y \in I$.
+	\end{fdef}
+	
+	\begin{prop}
+	$\ker \phi_a$ est un idéal de $\K[X]$.
+	\end{prop}
+	\begin{proof}
+	Soit $P \in \ker \phi_a$ et $Q \in \K[X]$. On a $(PQ)(a) = P(a) * Q(a) = 0_A * Q(a) = 0_A$.
+	\end{proof}
+	
+	Alors, deux cas sont possibles : 
+	\begin{itemize}
+	\item Ou bien $\ker \phi_a = \lbrace 0 \rbrace$, ce qui signifie que $a$ n'a pas de polynôme annulateur non nul.
+	\item Ou bien il existe un unique polynôme unitaire $\mu_a \in \K[X]$ tel que $\ker \phi_a$ est l'ensemble de ses multiples, noté $\mu_a \K[X]$. Alors :
+	\[\boxed{P(a) = 0 \;\Longleftrightarrow\; \mu_a \;|\; P }\]
+	$\mu_a$ s'appelle le \textbf{polynôme minimal} de $a$.
+	\end{itemize}
+	
+	\begin{fthme}
+	Si $A$ est de \textbf{dimension finie}, on a toujours $\ker \phi_a \neq \lbrace 0 \rbrace$, donc $\mu_a$ est toujours défini.
+	
+	En particulier, cela est vrai quand $A = \mathcal M_p(\K)$ ou $A = \mathcal L(E)$ avec $E$ de dimension finie.
+	\end{fthme}
+	\begin{proof}
+	On pose $d = \dim A$. La famille $(a^k)_{k\in \llbracket 0, d \rrbracket}$ est de cardinal $d+1$, donc est liée. Alors, il existe $(\alpha_0, \ldots, \alpha_d) \in \K^d$, non tous non nuls, tels que $\sum_{k=0}^d \alpha_k a^k = 0$. Posons $P = \sum_{k=0}^d \alpha_k X^k$, on a $P \neq 0$ et $P(a) = 0$.
+	\end{proof}
+	
+	\begin{fthme}
+	On suppose que $\ker \phi_a \neq \lbrace 0 \rbrace$ et $d \underset{\mathrm{not}}{=} \deg \mu_a$. 
+	
+	Alors, la famille $(a^k)_{k\in \llbracket 0, d-1 \rrbracket}$ est une base de $\K[a]$. En particulier, $\dim \K[a] = \deg \mu_a$.
+	\end{fthme}
+	\begin{proof}
+	\underline{Liberté :} On suppose $\sum_{k=0}^{d-1} \alpha_k a^k = 0$, $\alpha_k \in \K$. On a $P(a) = 0$, où $P = \sum_{k=0}^{d-1} \alpha_k X^k$. Donc $\mu_a \;|\; P$, or $\deg \mu_a = d$ et $\deg P \leq d$, donc $P = 0$ donc $\alpha_k = 0$.
+	
+	\underline{Génératrice :} Soit $b \in \K[a]$. Par définition de $\K[a]$, il existe $P \in \K[x]$ tel que $b = P(a)$. Par division euclidienne de $P$ par $\mu_a$ : $P =\mu_a Q + R$, avec $\deg R < \deg \mu_a$, donc $\deg P \leq d-1$.
+	
+	Alors $b = P(a) = (\mu_a Q)(a) + R(a)$. Or $\mu_a$ est annulateur de $a$, donc $b = P(a) = R(a)$. On pose $R = \sum_{k=0}^{d-1} r_k X^k$, alors $b = \sum_{k=0}^{d-1} r_k a^k$, donc $b$ est bien combinaison linéaire de $(a^k)_{k \in \llbracket 0, d-1 \rrbracket}$.
+	\end{proof}
+	
+	\begin{fthmead}[Cayley-Hamilton] \mbox{~}\\
+	Le polynôme caractéristique est un polynôme annulateur.
+	\end{fthmead} \newpage
+	
+	\subsection{Compléments}
+		\subsubsection{Polynômes et éléments propres}
+	\begin{fthme}
+	Soit $E$ un $\K$-espace vectoriel, $u \in \mathcal L(E)$, $\lambda \in \K$, $x \in E$ et $P \in \K[X]$. Si $u(x) = \lambda x$, alors $P(u)(x) = P(\lambda)(x)$.
+	
+	Ou bien : $(\lambda, x)$ couple propre de $u \; \Longrightarrow \;$ $(P(\lambda, x)$ couple propre de $P(u)$.
+	
+	Ou bien : $\lambda \in \Sp(u) \;\Longrightarrow\; \begin{cases}
+													  P(\lambda) \in \Sp(P(u)) \\
+													  E_{\lambda}(u) \subset E_{P(\lambda)}(P(u))
+													  \end{cases}$
+	\end{fthme}
+	\begin{proof}
+	Par récurrence, montrons que $ \forall k \in \N,\; u^k(x) = \lambda^k x$.
+	\begin{itemize}
+	\item[$\bullet$ \underline{$k = 0$ :}] c'est évident.
+	\item[$\bullet$ \underline{$k \to k+1$ :}] $u^{k+1}(x) = u(u^k(x)) = u(\lambda ^kx) = \lambda^k u(x) = \lambda^k \lambda x = \lambda^{k+1}x$. 
+	
+	On pose $P = \sum_{k=0}^n \alpha_k X^k$. Alors $P(u) = \sum_{k=0}^n \alpha_k u^k$. Alors : $P(u)(x) = \sum_{k=0}^n \alpha_k u^k(x) = \sum_{k=0}^n \alpha_k \lambda^k x = P(\lambda)(x).$ \qedhere
+	\end{itemize}
+	\end{proof}
+	
+	\begin{cor}
+	Si $P(u) = 0$, le théorème devient : $\boxed{\lambda \in \Sp(u) \;\Longrightarrow\; P(\lambda) = 0.}$
+	\end{cor}
+	
+		\subsubsection{Décomposition des noyaux}
+	\begin{fthme}[Lemme des noyaux] \mbox{~}\\
+	Soit $u \in \mathcal L(E)$, $(P,Q) \in \K[X]^2$ tels que $P \wedge Q = 1$. On a :
+	\[ \boxed{\ker \left [(PQ)(u) \right] = \ker \left[P(u) \right] \oplus \ker \left[Q(u) \right] }\]
+	\end{fthme}
+	\begin{proof} \mbox{~}\\
+		\begin{itemize}
+		\item[$\bullet$ \underline{$\supset$ :}] Il suffit de montrer que $\ker [P(u)] \subset \ker [(PQ)(u)]$, car $P$ et $Q$ ont un rôle symétrique.
+		
+		Or $(PQ)(u) = P(u) \circ Q(u) = Q(u) \circ P(u)$. D'où : $\ker [P(u)] \subset \ker [(PQ)(u)]$ et $\ker [Q(u)] \subset \ker [(PQ)(u)]$. Ainsi par somme, on a montré l'inclusion.
+		
+		\item[$\bullet$ \underline{$\oplus$ :}] Par théorème de Bézout, on a $(U,V) \in \K[X]^2$ tels que $UP + VQ = 1$. Donc $(UP)(u) + (VQ)(u) \overset{(*)}{=} \id$, qu'on peut aussi écrire $U(u) \circ P(u) + V(u) \circ Q(u) = \id$. 
+		
+		D'où : $x \in \ker [P(u)] \cap \ker [Q(u)] \Longrightarrow x = 0$.
+		
+		\item[$\bullet$ \underline{$\subset$ :}] Soit $x \in \ker [(PQ)(u)]$. Par la relation $(*)$, on a $x = \underbrace{(UP)(u)(x)}_ {=z} + \underbrace{(VQ)(u)(x)}_{=y}$. 
+		
+		Et : 
+		\begin{align*}
+		P(u)(y) &= P(u) [(VQ)(u)(x)] \\
+		&= [P(u) \circ (VQ)(u)](x) \\
+		&= [(VPQ)(u)](x) = 0 \text{ car } x \in \ker [(PQ)(u)]\\
+		&= [V(u) \circ (PQ)(u)](x) \\
+		&= V(u)(0) = 0
+		\end{align*}
+		Ainsi, on a montré que $y \in \ker[P(u)]$. On montre de même que $z \in \ker [Q(u)]$. \qedhere
+		\end{itemize}
+	\end{proof}
+	
+	\begin{rem}
+	Si en plus $(PQ)(u) = 0$, le théorème devient : $\ker [P(u)] \oplus \ker [Q(u)] = E$.
+	\end{rem}
+	
+	\begin{ex}
+	Soit $u \in \mathcal L(E)$ tel que $u^3 = \id$. Alors, $X^3 - 1$ est annulateur de $u$. Or $X^3 - 1 = (X-1)(X^2 + X + 1)$, et $X-1$ est premier avec $X^2 + X + 1$. Par le théorème des noyaux, $E = \ker [(X-1)(u)] \oplus \ker [(X^2 + X + 1)(u)]$.
+	
+	Ainsi, $\boxed{E = \underbrace{\ker[u - \id]}_{= \Inv(u)} \oplus \ker [u^2 + u + \id].}$
+	\end{ex}
+	
+\hr
+	
+	On peut étendre le théorème par récurrence à un nombre fini de polynômes. Soit $(P_1, \ldots, P_k) \in \K[X]^k$, deux à deux premiers entre eux, et $P = \prod_{i=1}^k P_i$. Alors :
+	\[ \boxed{ \ker[P(u)] = \bigoplus_{i=1}^k \ker [P_i(u)] }\]
+	
+	\section{Diagonalisation}
+	Jusqu'au 1.4.3 inclus, $E$ est un $\K$-espace vectoriel de dimension $n$, et $u \in \mathcal L(E)$.
+	
+	\subsection{Définition}
+	\begin{fdef}[Diagonalisabilité] \mbox{~}\\
+	$u$ est \textbf{diagonalisable} s'il existe une base $\mathcal B$ de $E$ telle que $\Mat_{\mathcal B}(u)$ est diagonale.
+	\end{fdef}
+	
+	\begin{rems}\mbox{~}\\
+		\begin{itemize}
+		\item $\Mat_{\mathcal B}(u)$ est diagonale $\;\Longleftrightarrow\;$ $\mathcal B$ est formée de vecteurs propres de $u$. On dit que $\mathcal B$ est une base propre.
+		\item Si $\Mat_{\mathcal B}(u) = D \in \mathcal D_n(\K)$, alors $\chi_u = \chi_D = \prod_{i=1}^n (X - d_{i,i})$. Ainsi, $\chi_u$ est scindé sur $\K$ et les termes diagonaux de $D$ sont les valeurs propres de $u$ répétées selon leur ordre.
+		\end{itemize}
+	\end{rems}
+	
+	\begin{ex}
+	Si $u$ possède $n$ valeurs propres distinctes (i.e. $chi_u$ est simplement scindé), alors $u$ est diagonalisable.
+	\end{ex}
+	
+	\subsection{Diagonalisabilité et sous-espaces propres}
+	Soit $\lambda_1, \ldots, \lambda_p$ les valeurs propres distinctes de $u$. On note $E_i = E_{\lambda_i}(u)$. On sait déjà par théorème que les $E_i$ sont en somme directe. 
+	\begin{fthme}\mbox{~}\\
+	On a équivalence entre :
+	\begin{itemize}
+	\item[1)] $u$ est diagonalisable.
+	\item[2)] $\bigoplus_{i=1}^p E_i = E$.
+	\item[3)] $\sum_{i=1}^p \dim E_i = n$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{proof}
+	\underline{$1) \;\Longrightarrow \; 2)$:} Soit $\B$ une base propre pour $u$. Chaque vecteur de $B$ est un vecteur propre de $u$, donc appartient à l'un des $E_i$, et à fortiori à la somme $\bigoplus_{i=1}^p E_i$. Donc le sous-espace vectoriel $\bigoplus_{i=1}^p E_i$ contient la base $\mathcal B$, donc c'est $E$.
+	
+	\underline{$2) \; \Longrightarrow \; 1)$ :} Soit $\B_i$ une base de $E_i$, formée donc de vecteurs propres, et $\B = \wideparen{\B_1\ldots \B_p}$. $\B$ est une base de $E$ formée de vecteurs propres de $u$ : on a donc bien une base propre pour $u$.
+	
+	\underline{$3)$} n'est que la traduction de $2)$ en terme de dimension.
+	\end{proof}
+	
+	\begin{fthme}\mbox{~}\\
+	On a équivalence entre :
+	\begin{itemize}
+	\item[1)] $u$ est diagonalisable.
+	\item[2)] $\chi_u$ est scindé sur $\K$, \textbf{et} $\forall i \in \llbracket 1, p \rrbracket,\; \dim E_i = \omega(\lambda_i)$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{proof}
+	On a : $\sum_{i=1}^p \dim E_i \underset{(1)}{\leq} \sum_{i=1}^p \omega(\lambda_i) \underset{(2)}{\leq} \deg \chi_u = n$.
+	
+	Par le théorème précédent, $u$ est diagonalisable si, et seulement si, $\sum_{i=1}^p \dim E_i = n$, donc il faut montrer que $(1)$ et $(2)$ sont des égalités.
+	
+	Or, $(2)$ est une égalité si, et seulement si, $\chi_u$ est scindé sur $\K$. Et, $(1)$ est une égalité si, et seulement si, $\forall i \in \llbracket 1, p \rrbracket, \; \dim E_i = \omega(\lambda_i)$.	
+	\end{proof}
+	
+	\subsection{Diagonalisabilité et polynômes annulateurs}
+	\begin{fthme}\mbox{~}\\
+	On a équivalence entre :
+	\begin{itemize}
+	\item[1)] $u$ est diagonalisable.
+	\item[2)] Il existe $P \in \K[X]$ simplement scindé sur $\K$ tel que $P(u) = 0$.
+	\item[3)] $\mu_u$ est simplement scindé sur $\K$.
+	\end{itemize}
+	\end{fthme}
+	
+	Il faut retenir que quand $u$ est diagonalisable, on a :
+	\begin{align*}
+	\mu_u &= \prod_{i=1}^p (X - \lambda_i) \\
+	\chi_u &= \prod_{i=1}^p (X - \lambda_i)^{\dim E_i}
+	\end{align*}
+	
+	\begin{cor}
+	Si $u$ est diagonalisable et $F$ est stable par $u$, alors $u_F$ est diagonalisable.
+	\end{cor}
+	\begin{proof}
+	Soit $P$ un annulateur de $u$ simplement scindé. En tout généralité, $(P(u))_F = P(u_F)$. Ici, cela donne $P(u_F)=0$ car $P(u) = 0$, donc $u_F$ est diagonalisable.
+	\end{proof}
+	
+	\begin{rem}
+	On en déduit également que $\mu_{u_F} \;|\; \mu_u$.
+	\end{rem}
+	
+	\subsection{Matrices diagonalisables}
+	\begin{fdef}[Diagonalisabilité]\mbox{~}\\
+	Soit $A \in \mathcal M_n(\K)$. $A$ est diagonalisable sur $\K$ si $A$ est semblable dans $\mathcal M_n(\K)$ à une matrice diagonale.
+	
+	Cela revient à dire : $\exists (D,P) \in \mathcal D_n(\K) \times GL_n(\K),\; D = P^{-1}AP$.
+	\end{fdef}
+	
+	On fait les mêmes remarques que pour les endomorphismes.
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item Soit $A \in \mathcal M_n(\K)$ telle qu'il existe $p \in \N^*$ tel que $A^p = I_n$. Alors $X^p - 1$ est annulateur de $A$ et est simplement scindé sur $\C$. Donc $A$ est diagonalisable sur $\C$, et $\Sp_{\C}(A) \subset \mathbb U_p$.
+	
+	Si de plus $X^p - 1 = \mu_A$, alors on aurait $\Sp_{\C}(A) = \mathbb U_p$.
+	
+	\item Diagonalisons la matrice $A = \begin{pmatrix} 0 & 1 & 2 \\ -4 & 4 & 4 \\ 2 & -1 & 0 \end{pmatrix}$.
+	
+	On calcule d'abord le polynôme caractéristique de $A$ : $\Tr A = 4$, $\Tr \widetilde A = 4$ et $\det A = 0$. Ainsi, $\chi_A = X^3 - 4X^2 + 4X$. Par factorisation, on trouve :
+	\[ \boxed{ \chi_A = X(X-2)^2 } \]
+	
+	L'éventuelle diagonalisabilité de $A$ dépend donc de $\dim E_2$. Soit $X \in E_2$. Alors :
+	\begin{align*}
+	AX = 2X \; &\Longleftrightarrow \; \begin{cases}
+									   y + 2z = 2x \\
+									   -4x + 4y + 4z = 2y \\
+									   2x - y = 2z
+									   \end{cases} \\
+	&\Longleftrightarrow \; \begin{cases}
+									   2x - y - 2z = 0 \\
+									   4x - 2y - 4z = 2y \\
+									   2x - y -2z = 0
+									   \end{cases}\\
+	&\Longleftrightarrow \; 2x - y - 2z = 0
+	\end{align*}
+	
+	Ainsi, $\dim E_2 = 2$, donc $A$ est diagonalisable. On choisit deux vecteurs indépendants dans $E_2$, par exemple $e_1 = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$ et $e_2 = \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}$. De même, on choisit un vecteur dans $E_0$ (qui est nécessairement une droite vectorielle car $0$ est racine simple de $\chi_A$) : $e_3 = \begin{pmatrix} 1 \\ 2 \\ -1 \end{pmatrix}$.
+	
+	Alors, $\B = (e_1, e_2, e_3)$ est une base propre. On a donc par application de la formule de changement de base à l'endomorphisme canoniquement associé :
+	
+	\[ \boxed{ A = PDP^{-1} \quad\text{ avec }\; D = \begin{pmatrix} \textcircled{2} & 0 & 0 \\ 0 & \textcircled{2} & 0 \\ 0 & 0 & \textcircled{0} \end{pmatrix} \text{ et } P = \begin{pmatrix} 1 & 1 & 1 \\ 2 & 0 & 2 \\ 0 & 1 & -1 \end{pmatrix} } \]
+	
+	On constate que les entrées entourées dans $D$ sont les valeurs propres de $A$ répétées suivant leur ordre, et que $P$ est constituée des trois vecteurs de $\B$.
+	\end{itemize}
+	\end{exs}
+	
+	\section{Trigonalisation}
+	\subsection{Endomorphismes}
+	\begin{fdef}[Trigonalisabilité]\mbox{~}\\
+	$u$ est trigonalisable s'il existe une base $\B$ de $E$ telle que $\Mat_\B(u)$ est triangulaire.
+	\end{fdef}
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item Si $\Mat_\B(u) = T \in TS_n(\K)$, alors $\chi_u = \chi_T = \prod_{i=1}^n (X - t_{i,i})$. Donc $\chi_u$ est scindé sur $\K$, et la diagonale de $T$ est formée des valeurs propres de $u$, comptées avec leur ordre.
+	
+	\item Posons $\B = (e_1, \ldots, e_n)$. On pose $F_k = \mathrm{Vect}(e_1, \ldots, e_k)$. Alors : $\Mat_\B(u)$ est triangulaire si, et seulement si, chaque $F_k$ est stable par $u$.
+	\end{itemize}
+	\end{rems}
+	
+	\begin{fthme}\mbox{~}\\
+	On a équivalence entre :
+	\begin{itemize}
+	\item[1)] $u$ est trigonalisable.
+	\item[2)] $\chi_u$ est scindé sur $\K$.
+	\item[3)] $\mu_u$ est scindé sur $\K$.
+	\item[4)] Il existe $P \in \K[X]$ scindé sur $\K$ tel que $P(u) = 0$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{proof}\mbox{~}\\
+	\begin{itemize}
+	\item[$\bullet$ \underline{$1)\Longrightarrow 2)$:}] Vu à la remarque précédente.
+	\item[$\bullet$ \underline{$2)\Longrightarrow 3)$:}] $\mu_u \;|\; \chi_u$ par Cayley-Hamilton, d'où le résultat.
+	\item[$\bullet$ \underline{$3)\Longrightarrow 4)$:}] $P = \mu_u$.
+	\item[$\bullet$ \underline{$4)\Longrightarrow 1)$:}] Par récurrence sur $n = \dim E$.
+		\begin{itemize}
+		\item[\underline{Initialisation :}] Pour $n=1$, rien à prouver, $u$ est une homothétie.
+		\item[\underline{Hérédité :}] On commence par montrer que $\Sp(u) \neq \varnothing$. On écrit $P = \prod_{i=1}^k (X-a_i)$. Ainsi, $0 = P(u) = [u - a_1 \id] \circ \cdots \circ [u - a_k\id]$. Donc l'un au moins des $u - a_i \id$ n'est pas bijectif. Pour un tel $i$, $a_i \in \Sp(u) \neq \varnothing$. On note $\lambda$ cette valeur propre.
+		
+		On pose $F = \Ima(u - \lambda \id)$. Alors $\dim F \leq n-1$ et $F$ est stable par $u$ : on note $u_F$ l'induit de $u$ sur $F$. On a à fortiori $P(u_F) = 0$ car $P(u) = 0$. On note $p = \dim F$.
+		
+		Si $p = 0$, $u = \lambda \id$ donc $u$ est trigonalisable.
+		
+		Sinon, $p \in \llbracket 1, n-1 \rrbracket$, et par hypothèse de récurrence, $u_F$ est trigonalisable, donc il existe une base $\B_1$ de $F$ telle que $\Mat_{\B_1}(u_F) = T \in TS_p(\K)$. On complète $\B_1$ en une base $\B = (e_1, \ldots, e_n)$ de $E$. Or pour $j \in \llbracket p+1, n \rrbracket$, $u(e_j) = (u - \lambda\id)(e_j) + \lambda e_j$.
+		
+		Donc : 		
+		\[\Mat_\B (u) = \begin{pmatrix} \mbox{\LARGE T} & \mbox{\LARGE *} \\ \mbox{\LARGE 0} & \begin{matrix} \lambda & \cdots & 0 \\ \vdots & \ddots & \vdots \\ 0 & \cdots & \lambda \end{matrix} \end{pmatrix} \in TS_n(\K) \] \qedhere		
+		\end{itemize}
+	\end{itemize}
+	\end{proof}
+	
+	\begin{cor}
+	Dans $\C$, $\chi_u$ est toujours scindé, donc si $\K = \C$, tout endomorphisme est trigonalisable.
+	\end{cor}
+	
+	\subsection{Matrices trigonalisables}
+	\begin{fdef}[Trigonalisabilité]\mbox{~}\\
+	Soit $A \in \mathcal M_n(\K)$. $A$ est trigonalisable sur $\K$ s'il existe $(T,P) \in TS_n(\K) \times GL_n(\K)$ telles que $T = P^{-1}AP$.
+	\end{fdef}
+	
+	Les remarques faîtes sur les endomorphismes sont toujours valables. 
+	
+	\begin{fthme}\mbox{~}\\
+	On a équivalence entre :
+	\begin{itemize}
+	\item[1)] $A$ est trigonalisable.
+	\item[2)] $\chi_A$ est scindé sur $\K$.
+	\item[3)] $\mu_A$ est scindé sur $\K$.
+	\item[4)] Il existe $P \in \K[X]$ scindé sur $\K$ tel que $P(A) = 0$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{cor}
+	Toute matrice est trigonalisable sur $\C$.
+	\end{cor}
+	
+	\subsection{Application à la nilpotence}
+	\begin{fthme}[Version endomorphismes] \mbox{~}\\
+	Soit $E$ un $\K$-espace vectoriel de dimension $n$ et $u \in \mathcal L(E)$. On a équivalence entre :
+	\begin{itemize}
+	\item[1)] $u^n = 0$.
+	\item[2)] $u$ est nilpotente.
+	\item[3)] $u$ est trigonalisable et $\Sp(u) = \lbrace 0 \rbrace$.
+	\item[4)] $u$ est représentable par une matrice triangulaire supérieure stricte.
+	\item[5)] $\chi_u = X^n$.
+	\end{itemize}
+	\end{fthme}
+	\begin{proof}
+	Très facile.
+	\end{proof}
+	
+	\begin{fthme}[Version matrices] \mbox{~}\\
+	Soit $A \in \mathcal M_n(\K)$. On a équivalence entre :
+	\begin{itemize}
+	\item[1)] $A^n = 0$.
+	\item[2)] $A$ est nilpotente.
+	\item[3)] $A$ est trigonalisable et $\Sp(A) = \lbrace 0 \rbrace$.
+	\item[3')] $\Sp_\C(A) = \lbrace 0 \rbrace$.
+	\item[4)] $A$ est semblable dans $\mathcal M_n(\K)$ à une matrice triangulaire supérieure stricte.
+	\item[5)] $\chi_A = X^n$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{cons}
+	L'indice de nilpotence est toujours inférieur ou égal à $n$.
+	\end{cons}
+	
+\chapter{Compléments sur les séries numériques}
+	Dans ce chapitre, on remplacera sans ambigu\"{i}té la proposition $u_n \limite{n}{+\infty} l$ par $u_n \longrightarrow l$.
+
+	\section{Règle de d'Alembert}
+	\begin{fthme}[de d'Alembert] \mbox{~}\\
+	Soit $\sum a_n$ une série réelle telle que :
+		\begin{itemize}
+		\item[\textbf{(H1)}] $a_n > 0$ à partir d'un certain rang.
+		\item[\textbf{(H2)}] $\frac{a_{n+1}}{a_n} \longrightarrow \ell \in \R_+ \cup \lbrace +\infty \rbrace$.
+		\end{itemize}
+		
+	\noindent Alors : 
+		\begin{itemize}
+		\item si $\ell < 1$, alors $\sum a_n$ converge.
+		\item si $\ell > 1$, alors $a_n \longrightarrow +\infty$. En particulier, $\sum a_n$ diverge grossièrement.
+		\end{itemize}
+	\end{fthme}
+	
+	\begin{ex}[Série exponentielle]
+	Soit $z\in \C$. La série $\sum \frac{z^n}{n!}$ est absolument convergente, donc convergente. En effet :
+	\begin{itemize}
+	\item si $z = 0$, c'est trivial ; 
+	\item si $z \neq 0$, alors on applique la règle de d'Alembert à la série $\sum \left|\frac{z^n}{n!} \right|$. 
+	
+	Alors : $\frac{ \left| \frac{z^{n+1}}{(n+1)!} \right| }{\left| \frac{z^n}{n!} \right|} = \frac{|z|}{n+1} \longrightarrow 0$, et ce pour tout $z \in \C$. Ainsi, $\sum \left|\frac{z^n}{n!} \right|$ converge, d'où le résultat.
+	\end{itemize}
+	\end{ex}
+	
+\hr
+	On admet provisoirement que : $\boxed{ \sum_{n=0}^{+\infty} \frac{z^n}{n!} = e^z}$.
+	
+	\begin{rem}
+	Si $\ell = 1$, le théorème ne permet pas de conclure. Prenons l'exemple des séries de Riemann $a_n = \frac{1}{n^\alpha}$. On sait que $\sum a_n$ converge si, et seulement si, $\alpha > 1$. Pourtant, pour tout $\alpha \in \R$, $\frac{a_{n+1}}{a_n} \longrightarrow 1$.
+	\end{rem}
+	
+	\section{Séries alternées}
+	\begin{fdef}[Série alternée]\mbox{~}\\
+	Une série réelle $\sum a_n$ est alternée si, et seulement si, $(-1)^na_n$ est de signe constant.
+	\end{fdef}
+	
+	\begin{fthme}[Critère spécial des séries alternées, ou TSA]\mbox{~}\\
+	On suppose : 
+		\begin{itemize}
+		\item[\textbf{(H1)}] $\sum a_n$ est alternée.
+		\item[\textbf{(H2)}] $a_n \longrightarrow 0$.
+		\item[\textbf{(H3)}] La suite $(|a_n|)$ est décroissante.
+		\end{itemize}
+		
+	\noindent Alors :
+		\begin{itemize}
+		\item[\textbf{(C1)}] La série $\sum a_n$ converge.
+		\item[\textbf{(C2)}] On pose $S = \sum_{n=0}^{+\infty} a_n$ et $R_n = \sum_{k=n+1}^{+\infty} a_k$.
+			\begin{itemize}
+			\item[a)] On pose $A_n = \sum_{k=0}^n a_k$. Alors : $\forall n \in \N,\; A_n \leq S \leq A_{n+1}$ ou $A_{n+1} \leq S \leq A_n$.
+			\item[b)] $S$ a le signe de $a_0$ et $|S| \leq |a_0|$.
+			\item[c)] $R_n$ a le signe de $a_{n+1}$ et $|R_n| \leq |a_{n+1}|$.
+			\end{itemize}
+		\end{itemize}
+	\end{fthme}
+	
+	\begin{rem}
+	La conclusion \textbf{(C2)} peut s'appliquer à une série absolument convergente, donc pour laquelle \textbf{(C1)} serait inutile.
+	\end{rem}
+	
+	\begin{ex}[Séries de Riemann alternées]
+	On considère la série $\sum \frac{(-1)^n}{n^\alpha}$.
+	
+	\begin{itemize}
+	\item Pour $\alpha > 1$, on a convergence absolue, donc convergence.
+	\item Pour $\alpha \leq 0$, on a divergence grossière.
+	\item Pour $\alpha \in ]0, 1]$, il n'y a pas convergence absolue. Mais le théorème sur les séries alternées s'applique, donc la série converge. 
+	
+	En fait, le théorème s'applique pour tout $\alpha > 0$. 
+	
+	On peut en déduire : $\left| \sum_{k=n+1}^{+\infty} \frac{(-1)^k}{k^\alpha} \right| \leq \frac{1}{(n+1)^\alpha}$.
+	\end{itemize}
+	\end{ex}
+	
+	\section{Comparaison série-intégrale}
+		\subsection{Les théorèmes du programme}
+	\begin{fthme}
+	Soit $f \in \mathcal{CM}\left([a, +\infty[, \R_+ \right)$ décroissante, $a \in \R$. Pour $n$ assez grand, on pose : 
+	\[\delta_n = \int_{n-1}^n f(t)\mathrm{d}t - f(n).\]
+	
+	Alors, $\delta_n \geq 0$ et $\sum \delta_n$ converge.
+	\end{fthme}
+	\begin{proof}
+	Par décroissance de $f$, on a l'inégalité :
+	\[ f(n) \leq \int_{n-1}^n f(t) \mathrm{d}t \leq f(n-1),\]
+
+	d'où 	
+	\[0 \leq \delta_n \leq f(n-1) - f(n).\]
+	
+	Par téléscopage, on obtient : $\sum_{n=n_0}^N [f(n-1) - f(n)] = f(n_0 - 1) - \underbrace{f(N)}_{\geq 0} \leq f(n_0 - 1) = \cste$.
+	
+	Ainsi, $\sum f(n-1) - f(n)$ est une \textbf{série à termes positifs} à sommes partielles majorées. Donc elle converge. Par comparaison de séries à termes positifs, $\sum \delta_n$ converge.
+	\end{proof}
+	
+	\begin{rem}
+	De même, si on pose $\delta'_n = f(n) - \int_n^{n+1} f(t)\mathrm{d}t$, on trouve par la même méthode que $\delta'_n \geq 0$ et que $\sum \delta'_n$ converge.
+	\end{rem}
+	
+	\begin{ex}[Constante d'Euler] 
+	On pose $f(t) = \frac{1}{t}$, avec $a = 1$. Alors le théorème s'applique, avec $\delta_n = \int_{n-1}^n \frac{\mathrm{d}t}{t} - \frac{1}{n}$.
+	
+	On pose $\Delta_n = \sum_{k=2}^n \delta_k = \int_1^n \frac{\mathrm{d}t}{t} - (H(n) - 1)$. Alors $\Delta_n = \ln (n) - H_n + 1$, ou encore : $H_n - \ln n = 1 - \Delta_n$. On sait que $(\Delta_n)$ converge, d'où : la suite $(H_n - \ln n)$ converge, et sa limite est appelée la \textbf{constante d'Euler}, notée $\gamma$.
+	\end{ex}
+	
+	\begin{fthme}[Affaiblissement du théorème précédent]\mbox{~}\\
+	On garde les mêmes hypothèses que précédemment. Pour $n$ entier supérieur ou égal à $a$, on pose $I_n = \int_a^n f(t)\mathrm{d}t$. 
+	
+	Alors, $\sum f(n)$ converge si, et seulement si, $(I_n)$ converge.
+	\end{fthme}
+	\begin{proof}
+	$\sum_{k=n_0}^n f(k) = \sum_{k=n_0}^n \left( \int_{k-1}^k f(t)\mathrm{d}t - \delta_k \right) = \int_{n_0-1}^n f(t)\mathrm{d}t - \Delta_{n_0}$.
+	
+	Donc $\sum_{k=n_0}^n f(k) = I_n - \Delta_{n_0} + \cste$.
+	
+	Par le théorème précédent, $\Delta_n$ converge, donc :
+	\[ \sum f(k) \text{ converge } \;\Longleftrightarrow\; (I_n) \text{ converge} \qedhere\] 
+	\end{proof}
+	
+	\begin{rem}
+	On verra au chapitre 6 que la convergence de $(I_n)$ équivaut à \textbf{l'intégrabilité} de $f$ sur $[a, +\infty[$.
+	\end{rem}
+	
+	\subsection{Digression}
+	Si $f$ est \textbf{monotone}, il faut savoir encadrer par des intégrales des sommes du type $\sum_{k=\sim}^\sim f(k)$. Cette méthode sert notamment à trouver un équivalent de la somme. 
+	\begin{prop}
+	Si $f$ est par exemple décroissante, on a : 
+	\[ \int_k^{k+1} f(t) \mathrm{d}t \leq f(k) \leq \int_{k-1}^k f(t) \mathrm dt \]
+	Ensuite, les intégrales se recollent par sommation.
+	\end{prop}
+	
+	\begin{ex}[Équivalent du reste des séries de Riemann]
+	On choisit $\alpha > 1$, et on cherche un équivalent quand $n$ tend vers $+\infty$ de $\sum_{k=n+1}^{+\infty} \frac{1}{k^\alpha}$. Par décroissance de $t \longmapsto \frac{1}{t^\alpha}$, on a :
+	\[ \int_k^{k+1} \frac{\mathrm dt}{t^\alpha} \leq \frac{1}{k^\alpha} \leq \int_{k-1}^k \frac{\mathrm dt}{t^\alpha} \]
+	
+	Soit $(n, N) \in \N^2$ avec $n < N$, par sommation de $n+1$ à $N$ :
+	\[ \int_{n+1}^{N+1} \frac{\mathrm dt}{t^\alpha} \leq \sum_{k=n+1}^N \frac{1}{k^\alpha} \leq \int_{n}^{N} \frac{\mathrm dt}{t^\alpha} \]
+	
+	Ainsi, on calcule les intégrales, et on trouve :
+	\[\frac{1}{1 - \alpha} \left( (N+1)^{1 - \alpha} - (n+1)^{1 - \alpha} \right) \leq S \leq \frac{1}{1 - \alpha} \left( N^{1-\alpha} - n^{1 - \alpha} \right)\]
+	
+	Par passage à la limite quand $N$ tend vers $+\infty$, on obtient :
+	\[\frac{(n+1)^{1 - \alpha}}{\alpha - 1} \leq \sum_{k=n+1}^{+\infty} \frac{1}{k^\alpha} \leq \frac{n^{1-\alpha}}{\alpha - 1}\]
+	
+	On en déduit donc : $ \boxed{ \sum_{k=n+1}^{+\infty} \frac{1}{k^\alpha} \underset{n \to +\infty}{\sim} \frac{n^{1 - \alpha}}{\alpha - 1} } $
+	\end{ex}
+	
+	\section{Sommation des relations de comparaisons}
+	Soit $(a_n) \in \C^\N$ et $(b_n) \in \R_+^\N$. On note $A_n = \sum_{k=0}^n a_k$, $B_n = \sum_{k=0}^n b_k$, et en cas de convergence, $\alpha_n = \sum_{k=n+1}^{+\infty} a_k$ et $\beta_n = \sum_{k=n+1}^{+\infty} b_k$.
+	
+	\begin{fthme}
+	On suppose que $\sum b_n$ est divergente.
+	
+	\begin{itemize}
+	\item[a)] Si $a_n = \mathcal O(b_n)$, alors $A_n = \mathcal O(B_n)$.
+	\item[b)] Si $a_n = \mathrm{o}(b_n)$, alors $A_n = \mathrm{o}(B_n)$.
+	\item[c)] Si $a_n \sim b_n$, alors $A_n \sim B_n$.
+	\end{itemize}
+	\end{fthme}
+
+	\begin{fthme}
+	On suppose que $\sum b_n$ est convergente.
+	
+	\begin{itemize}
+	\item[a)] Si $a_n = \mathcal O(b_n)$, alors $\alpha_n = \mathcal O(\beta_n)$.
+	\item[b)] Si $a_n = \mathrm{o}(b_n)$, alors $\alpha_n = \mathrm{o}(\beta_n)$.
+	\item[c)] Si $a_n \sim b_n$, alors $\alpha_n \sim \beta_n$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{fthme}[de Césaro] Soit $(u_n) \in \C^\N$. On pose $\mu_n = \frac{1}{n} \sum_{k=0}^{n-1} u_k$. Alors :
+	\[(u_n) \text{ converge } \Longrightarrow (\mu_n) \text{ converge vers la même limite}\]
+	\end{fthme}
+	\begin{proof}
+	Soit $\ell$ la limite de $(u_n)$. Alors $u_n - \ell = \mathrm o(1)$, et $1 > 0$ et $\sum 1$ diverge. Donc par théorème, $\sum_{k=0}^{n-1} (u_k - \ell) = \mathrm o \left( \sum_{k=0}^{n-1} 1 \right) = \mathrm o(n)$. Ainsi :
+	\[ \dfrac{\displaystyle{\sum_{k=0}^{n-1} (u_k - \ell)}}{n} \longrightarrow 0 \text{, et ainsi } \mu_n \longrightarrow \ell \qedhere\] 
+	\end{proof}
+	
+	\section{Équivalence suite-série}
+	Soit $(u_n) \in \C^\N$. À cette suite, on associe la suite $(a_n)$ définie par : 
+	\[
+	\begin{cases}
+	a_0 = u_0 \\
+	\forall n\geq 1,\; a_n = u_n - u_{n-1},
+	\end{cases}
+	\]
+	
+	de sorte que $\boxed{\sum_{k=0}^n a_k = u_n.}$ 
+	
+	En particulier, $(u_n)$ converge si, et seulement si, $\sum a_n$ converge. De plus, en cas de convergence, soit $\ell$ la limite de $(u_n)$, on a : $\ell = \sum_{k=0}^{+\infty} a_k$. Ainsi, par différence : 
+	\[\boxed{ \ell - u_n =\sum_{k=n+1}^{+\infty} a_k }\]
+	
+	\begin{ex}[Équivalent plus précis de $H_n$]
+	On pose $u_n = H_n - \ln n$. Ici, pour $n \geq 2, \; a_n = u_n - u_{n-1} = \frac{1}{n} + \ln \left( 1 - \frac{1}{n} \right)$. Par développement limité à l'ordre 2, on obtient :
+	\[a_n = \frac{1}{n} + \left( -\frac{1}{n} - \frac{1}{2n^2} + \mathrm o \left( \frac{1}{n^2} \right) \right) = -\frac{1}{2n^2} + \mathrm o \left(\frac{1}{n^2} \right)\]
+	
+	Ainsi, $a_n \sim -\frac{1}{2n^2}$. Alors par comparaison, la série $\sum a_n$ converge, donc $(u_n)$ converge. Posons $\gamma = \lim u_n$. On obtient :
+	\[\gamma - u_n = \sum_{k=n+1}^{+\infty} a_k\]
+	
+	Comme $a_n \sim -\frac{1}{2n^2}$, par sommation des relations de comparaison :
+	\begin{align*}
+	\gamma - u_n &\sim \sum_{k=n+1}^{+\infty} \left( -\frac{1}{2k^2} \right) \\
+	&= -\frac{1}{2} \underbrace{\sum_{k=n+1}^{+\infty} \frac{1}{k^2}}_{\sim \frac{1}{n^2}}
+	\end{align*}
+	
+	Donc $\gamma - u_n \sim -\frac{1}{2n}$. On en déduit donc : 
+	\[ \boxed{ H_n \sim \ln n + \gamma + \frac{1}{2n} } \]
+	\end{ex}
+	
+	\section{Sommation des suites doubles}
+		\subsection{Cas << tout est positif >>}
+	\paragraph{Conventions :} Si $\sum a_n$ est une série à termes positifs \textbf{divergente}, on pose : $\sum_{n=0}^{+\infty} a_n \overset{\mathrm{def}}{=} +\infty$.
+	
+	Si $(a_n)$ est une suite à termes dans $\R_+ \cup \lbrace +\infty \rbrace = \overline{\R}_+$ et s'il existe au moins un $n_0 \in \N$ tel que $a_{n_0} = +\infty$, alors $\sum_{n=0}^{+\infty} a_n = +\infty$.
+	
+	\begin{fthme}[de Fubini, voir le chapitre sur les familles sommables]\mbox{~}\\
+	Soit $(a_{p,q})_{(p,q) \in \N^2} \in \R_+^{\N \times \N}$ une suite double positive. Alors :
+	\[ \boxed{ \sum_{p=0}^{+\infty} \left( \sum_{q=0}^{+\infty} a_{p,q} \right) = \sum_{q=0}^{+\infty} \left( \sum_{p=0}^{+\infty} a_{p,q} \right) } \in \overline \R_+\]
+	\end{fthme}
+	
+	\begin{fdef}[Suite positive sommable]\mbox{~}\\
+	La suite double \textbf{positive} $(a_{p,q})$ est sommable quand ces sommes sont finies.
+	\end{fdef}
+	
+	\begin{ex}[Fonction zêta de Riemann] Pour $\alpha > 1$, on pose : $\boxed{\zeta(\alpha) = \sum_{n=1}^{+\infty} \frac{1}{n^\alpha} .}$
+	
+	Calculer $S = \sum_{p=2}^{+\infty} \left( \zeta(p) - 1 \right)$. On a toujours $\zeta(\alpha) \geq 1$, donc $\zeta(p) - 1 \geq 0$, donc $S$ est bien définie. Ensuite, $\zeta(p) - 1 = \sum_{n=2}^{+\infty} \frac{1}{n^p}$. Donc :	
+	\[S = \sum_{p=2}^{+\infty} \left( \sum_{n=2}^{+\infty} \;\frac{1}{n^p} \right)\]
+
+	Or $\left(\frac{1}{n^p}\right)$ est une suite double positive, donc par théorème :
+	\[S = \sum_{\bm{n=2}}^{+\infty} \left( \sum_{\bm{p=2}}^{+\infty} \; \frac{1}{n^p} \right)\]
+	
+	Ainsi, on obtient\footnote{À ce stade, on voit déjà que $S < +\infty$ car $\sum \frac{1}{n(n-1)}$ converge} : $S = \sum_{n=2}^{+\infty} \frac{\frac{1}{n^2}}{1 - \frac{1}{n}} = \sum_{n=2}^{+\infty} \frac{1}{n(n-1)} = \sum_{n=2}^{+\infty} \left( \frac{1}{n-1} - \frac{1}{n} \right)$
+	
+	Par téléscopage, on déduit : $S = 1$.
+	\end{ex}
+	
+	\subsection{Cas général}
+	\begin{fdef}[Suite complexe sommable] \mbox{~}\\
+	Soit $(a_{p,q})_{(p,q) \in \N^2} \in \C^{\N \times \N}$. La suite double $(a_{p,q})$ est \textbf{sommable} lorsque la suite réelle positive $(|a_{p,q}|)$ l'est.
+	\end{fdef}
+	
+	\begin{fthme} On suppose que $(a_{p,q})$ est sommable. Alors :
+	\begin{itemize}
+	\item[$*$] Pour tout $p \in \N$, la série $\sum_q a_{p,q}$ est absolument convergente.
+	\item[$*$] Pour tout $q \in \N$, la série $\sum_p a_{p,q}$ est absolument convergente.
+	\item[$*$] La série $\sum_p \left( \sum_{q=0}^{+\infty} a_{p,q} \right)$ est absolument convergente.
+	\item[$*$] La série $\sum_q \left( \sum_{p=0}^{+\infty} a_{p,q} \right)$ est absolument convergente.
+	\item[$*$] $\sum_{p=0}^{+\infty} \left( \sum_{q=0}^{+\infty} a_{p,q} \right) = \sum_{q=0}^{+\infty} \left( \sum_{p=0}^{+\infty} a_{p,q} \right)$
+	\end{itemize}
+	\end{fthme}
+	
+	\section{Produit de Cauchy (ou de convolution) }
+	\begin{fdef}[Produit de Cauchy]\mbox{~}\\
+	Soit $((a_n), (b_n)) \in \left( \C^\N \right)^2$. Leur \textbf{produit de Cauchy} est la suite $(c_n)$ définie par :
+	\[\boxed{c_n = \sum_{k=0}^n a_kb_{n-k} = \sum_{k=0}^n a_{n-k}b_k = \sum_{p+q=n} a_pb_q }\]
+	\end{fdef}
+	
+	\begin{fthme} Soit $\sum a_n$ et $\sum b_n$ deux séries absolument convergentes. Alors, on a :
+	\[\sum c_n \text{ est absolument convergente, et } \sum_{n=0}^{+\infty} c_n = \left( \sum_{n=0}^{+\infty} a_n \right) \left( \sum_{n=0}^{+\infty} b_n \right) \]
+	\end{fthme}
+	
+\chapter{Convexité}
+	\section{Ensembles convexes}
+	Soit $E$ un $\R$-espace vectoriel.
+	
+	\begin{fdef}[Barycentre]\mbox{~}\\
+	Soit $(a_i)_{1 \leq i \leq n} \in E^n$ et $(\alpha_i)_{1 \leq i \leq n} \in \R^n$. On pose $S = \sum_{i=1}^n \alpha_i$ et on suppose $S \neq 0$. 
+	
+	\noindent Le \textbf{barycentre} de $((a_i, \alpha_i))_{1 \leq i \leq n}$ est : 
+	\[\boxed{ g = \frac{1}{S} \sum_{i=1}^n \alpha_i a_i.}\]
+	
+	Ainsi, le barycentre est <<une combinaison linéaire avec une somme égale à 1>>.
+	\end{fdef}	
+	
+	\begin{fdef}[Segment] \mbox{~}\\
+	Soit $(a,b) \in E^2$. Le \textbf{segment} d'extrémités $a$ et $b$ est l'ensemble des barycentres de $a$ et $b$ à coefficients positifs. Ainsi : 
+	\[ \boxed{[a,b] = \lbrace (1-t)a + tb \;|\; t \in [0,1]\rbrace} = \lbrace a + t(b-a) \;|\; t\in [0,1] \rbrace\]
+	\end{fdef}
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item $[a,b] = [b,a]$.
+	\item Lorsque $E = \R$, il y a cohérence avec la définition habituelle d'un segment lorsque $a \leq b$. Si $a > b$, $[a,b] = \begin{cases} 
+						 \varnothing \text{ au sens des intervalles de } \R \\
+						 [b,a] \text{ au sens général}
+						 \end{cases}$
+	\end{itemize}
+	\end{rems} \newpage
+	
+	\begin{fdef}[Ensemble convexe]\mbox{~}\\
+	Soit $C \subset E$. $C$ est \textbf{convexe} si, et seulement si, $\forall (a,b)\in C^2,\; [a,b] \subset C$, i.e. $\forall (a,b) \in C^2,\; \forall t \in [0,1],\; (1-t)a + tb \in C$.
+	\end{fdef}
+	
+	\begin{prop}
+	$C$ est convexe si, et seulement si, tout barycentre à coefficients positifs (i.e. une \textbf{combinaison convexe}) d'éléments de $C$ appartient à $C$. Ainsi :
+	\[ C \text{ est convexe } \Longleftrightarrow \;C \text{ est stable par combinaison convexe} \]
+	\end{prop}
+	\begin{proof}
+	\underline{CS :} évident (la définition est le cas de deux points).
+	
+	\underline{CN :} par récurrence sur le nombre de points.
+	\end{proof}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] Tout sous-espace vectoriel de $E$ est convexe : en effet, ils sont stables par combinaison linéaire, donc en particulier par combinaison convexe.
+	\item[2)] Tout sous-espace affine de $E$ est convexe.
+				\begin{proof}
+				En effet, soit $A = x_0 + F$ avec $x_0 \in E$ et $F$ un sous-espace vectoriel de $E$. Soit $(a,b) \in A^2,\; t \in [0,1]$. Alors $(1-t)a + tb = (1-t)(x_0 + u) + t(x_0 + v)$, avec $(u,v) \in F^2$. Alors $(1-t)a + tb = x_0 + \underbrace{(1-t)u + tv}_{\in F} \in A$.
+				\end{proof}
+	\item[3)] Les parties convexes de $\R$ sont $\varnothing$ et les intervalles.
+	\item[4)] Soit $A \subset E$ quelconque. Soit $\mathcal C(A)$ l'ensemble des combinaisons convexes de points de $A$. Alors $\mathcal C(A)$ est convexe, et c'est le plus petit convexe contenant $A$. On l'appelle \textbf{enveloppe convexe} de $A$.
+	\end{itemize}
+	\end{exs}
+	
+	\begin{fthme}
+	Toute intersection d'ensembles convexes est convexe.
+	\end{fthme}
+	
+	\section{Fonctions convexes}
+		\subsection{Généralités}
+	\begin{fdef}[Fonction convexe] \mbox{~}\\
+	Soit $I$ un intervalle de $\R$ et $f : I \longrightarrow \R$.
+	
+	\noindent $f$ est convexe si, et seulement si, $\forall (a,b)\in I^2,\; \forall t \in [0,1],\; f((1-t)a + tb) \leq (1-t)f(a) + tf(b)$.
+	\end{fdef}
+	
+	Géométriquement, $f$ est convexe si, et seulement si, tout arc de sa représentation graphique est situé sous sa courbe. \newpage
+	
+	\begin{fdef}[Fonction affine interpolatrice]\mbox{~}\\
+	Pour $(a,b) \in I^2$ et $a \neq b$, on note $\varphi_{f,a,b}$ la fonction affine qui interpole $f$ en $a$ et $b$ i.e. $\varphi_{f,a,b} (a) = f(a)$ et $\varphi_{f,a,b} (b) = f(b)$.
+	
+	\noindent Alors, $f$ est convexe si, et seulement si, pour tout $(a,b) \in I^2$ tels que $a \neq b$, $f(x) \leq \varphi_{f,a,b} (x)$ sur $[a,b]$.
+	\end{fdef}
+	
+	On peut montrer que $f(x) \geq \varphi_{f,a,b}(x)$ pour $x \in I \setminus [a,b]$.
+	
+	\begin{fdef}[Concavité]\mbox{~}\\
+	Soit $f : I \longrightarrow \R$. $f$ est \textbf{concave} si, et seulement si, $-f$ est convexe. Ainsi, toutes les inégalités énoncées précédemment \textit{changent de sens}.
+	\end{fdef}
+	
+	\begin{rem}
+	Si $f$ est convexe et concave, alors $f$ est affine, et réciproquement.
+	\end{rem}
+	
+	\begin{prop}
+	On pose $E_f = \lbrace (x,y) \in I \times \R \;|\; y \geq f(x) \rbrace$ l'épigraphe de $f$. Alors $f$ est convexe si, et seulement si, $E_f$ est convexe.
+	\end{prop}
+	
+	\begin{fthme}[Inégalité de Jensen]\mbox{~}\\
+	Une fonction $f : I \longrightarrow \R$ est convexe si, et seulement si, pour tout $(a_1,\ldots, a_n) \in I^n$ et pour tout $(t_1,\ldots, t_n) \in \R_+^n$ tels que $\sum_{i=1}^n t_i = 1$, on a l'inégalité :
+	\[\boxed{ f\left( \sum_{i=1}^n t_ia_i \right) \leq \sum_{i=1}^n t_if(a_i) }\]
+	\end{fthme}
+	
+	\begin{proof}
+	Par récurrence sur $n$.
+	\end{proof}
+	
+	\subsection{Convexité et taux d'accroissements}
+	\begin{fdef}[Taux d'accroissement]\mbox{~}\\
+	Soit $f : I \longrightarrow \R$ une fonction convexe. On fixe $a \in I$, et on définit la fonction \textbf{taux d'accroissement} par $\app{\tau_a}{I \setminus \{a \}}{\R}{x}{\frac{f(x) - f(a)}{x - a}}$.
+	\end{fdef}
+	
+	\begin{fthme}
+	La fonction $\tau_a$ est croissante.
+	\end{fthme}
+	
+	\begin{cons}[Inégalité des trois pentes]
+	Soit $f$ une fonction convexe sur $I$, et $(a,b,c) \in I^3$ avec $a < b < c$. Alors on a :
+	\[ \frac{f(b) - f(a)}{b - a} \leq \frac{f(c) - f(a)}{c-a} \leq \frac{f(c) - f(b)}{c - b} \]
+	C'est-à-dire, $\boxed{\tau_a(b) \leq \tau_a(c) = \tau_c(a) \leq \tau_c(b).}$
+	\end{cons}
+	
+	\subsection{Convexité et dérivées}
+	\begin{fthme}\mbox{~}\\
+	Soit $f \in \mathcal D(I, \R)$. Les propositions suivantes sont équivalentes :
+	\begin{itemize}
+	\item[1)] $f$ est convexe.
+	\item[2)] $f'$ est croissante.
+	\item[3)] $\forall (a,x) \in I^2,\; f(x) \geq f(a) + f'(x)(x-a)\;\;$ (i.e. la courbe représentative de $f$ est toujours au-dessus de sa tangente).
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{cons}
+	Si $f \in \mathcal D^2(I, \R)$, $f$ est convexe si, et seulement si, $f'' \geq 0$.
+	\end{cons}
+	
+	\subsection{Quelques inégalités de convexité}
+	\begin{center}
+	\begin{tabular}{|c|c|}
+	\hline
+	Domaine de validité & Inégalité \\
+	\hline
+	$x \in \R$ & $e^x \geq 1+x$ \\
+	\hline
+	$x \in \R_+^*$ & $\ln x \leq x - 1$ \\
+	\hline
+	$u \in ] -1; +\infty[$ & $\ln (1+u) \leq u$\\
+	\hline
+	$x \in[0,\pi]$ & $0 \leq \sin x \leq x$ \\
+	\hline
+	$x \in[-\pi; \pi]$ & $|\sin x | \leq |x|$ \\
+	\hline
+	$x \in\left[0, \frac{\pi}{2} \right]$ & $\sin x \geq \frac{2x}{\pi}$\\
+	\hline
+	$(x_1, \ldots, x_n) \in \R_+^n$ & $\sqrt[n\,]{\prod_{k=1}^n x_k} \leq \frac{1}{n} \sum_{k=1}^n x_k$\\
+	\hline
+	\end{tabular}
+	\end{center}
+	
+\chapter{Espaces vectoriels normés}
+	Dans ce chapitre, le corps $\K$ désignera $\R$ ou $\C$.
+	
+	\section{Normes et distances}
+		\subsection{Norme}
+	\begin{fdef}[Norme]\mbox{~}\\
+	Soit $E$ un $\K$-espace vectoriel. Une \textbf{norme} sur $E$ est une application $N : E \longrightarrow \R_+$ telle que :
+	\begin{itemize}
+	\item[1)] $N(x) = 0 \;\Longleftrightarrow\; x = 0$ (séparation).
+	\item[2)] $\forall (\lambda, x) \in \K \times E,\; N(\lambda x) = |\lambda|N(x)$ (homogénéité).
+	\item[3)] $\forall (x,y) \in E^2, \; N(x+y) \leq N(x) + N(y)$ (inégalité triangulaire).
+	\end{itemize}
+	\end{fdef}
+	
+	\begin{rem}
+	$N$ est une \textbf{semi-norme} si elle ne vérifie que $2$ et $3$.
+	\end{rem}
+	
+	$3$ s'écrit également : $N\left( \sum_{i=1}^n x_i \right) \leq \sum_{i=1}^n N(x_i)$, ou encore $|N(x) - N(y)| \leq N(x-y)$.
+	
+	\begin{fdef}[Espace vectoriel normé]\mbox{~}\\
+	Un \textbf{espace vectoriel normé} est un $\K$-espace vectoriel $E$ muni d'une norme $N$. On le note $(E,N)$.
+	\end{fdef}
+	
+		\subsection{Exemples}
+	\begin{itemize}
+	\item[1)] $|\cdot|$ est une norme sur $\K$. Mieux, les seules normes sur $\R$ sont les $c|\cdot|$ où $c \in \R_+^*$. En effet, si $N$ est une norme sur $\R$, alors $\forall x \in \R,\; N(x) = N(x\cdot 1) \underset{(2)}{=} |x|N(1)$. 
+	
+	De même, les seules $\C$-normes sur $\C$ (i.e. normes sur $\C$ vues comme $\C$-espace vectoriel) sont les $c|\cdot|$ avec $c \in \R_+^*$.
+	
+	\item[2)] \underline{Normes euclidiennes :} Si $\langle \cdot | \cdot \rangle$ est un produit scalaire sur $E$, on définit une norme sur $E$ par : $\forall x \in E,\; ||x|| = \sqrt{ \langle x | x\rangle}$. Une telle norme est une \textbf{norme euclidienne}.
+	
+	\item[3)] \underline{Trois normes usuelles sur $\K^n$ :} Soit $x = (x_1, \ldots, x_n) \in \K^n$. On pose :
+	\[
+	\mathcal N_{\infty} (x) = \max_{i=1}^n |x_i|,\;\;
+	\mathcal N_1 (x) = \sum_{i=1}^n |x_i| \;\text{ et }\;
+	\mathcal N_2(x) = \sqrt{\sum_{i=1}^n |x_i|^2}
+	\]
+	
+	$\mathcal N_\infty$, $\mathcal N_1$ et $\mathcal N_2$ sont des normes sur $\K^n$. En effet, tout est clair sauf l'inégalité triangulaire pour $\mathcal N_2$. Mais si $\K = \R$, $\mathcal N_2$ est la norme euclidienne canonique. Si en revanche $\K = \C$, 
+	\begin{align*}
+	\mathcal N_2(x+y) &= \sqrt{ \sum_{i=1}^n |x_i + y_i |^2} \\
+	&\leq \sqrt{ \sum_{i=1}^n \left( |x_i| + |y_i| \right)^2} \quad (*)
+	\end{align*}
+	
+	On pose $x' = (|x_1|, \ldots, |x_n|) \in \R^n$ et $y' = (|y_1|, \ldots, |y_n|) \in \R^n$. On remarque que $(*)$ est alors $\mathcal N_2(x' + y')$, donc $\mathcal N_2(x' + y') \leq \mathcal N_2(x') + \mathcal N_2(y')$. Or $\mathcal N_2(x') = \mathcal N_2(y)$. D'où : $\boxed{ \mathcal N_2(x+y) \leq \mathcal N_2(x) + \mathcal N_2(y).}$
+	
+	\item[3')] \underline{Extension :} Soit $E$ un $\K$-espace vectoriel de dimension $n$, et $\B = (e_i)_{1 \leq i \leq n}$ une base de $E$. Pour $x = \sum_{i=1}^n x_ie_i \in E$, on pose : 
+	\[
+	\mathcal N_{\B, \infty} (x) = \max_{i=1}^n |x_i|,\;\;
+	\mathcal N_{\B, 1} (x) = \sum_{i=1}^n |x_i| \;\text{ et }\;
+	\mathcal N_{\B, 2} (x) = \sqrt{\sum_{i=1}^n |x_i|^2}
+	\]
+	
+	\item[4)] \underline{Normes uniformes :} Soit $X$ un ensemble non vide quelconque. Soit $\B(X,\K)$ l'ensemble des applications \textit{bornées} de $X$ dans $\K$. Alors $\B(X, \K)$ est un sous-espace vectoriel de $\mathcal F(X, \K)$. Pour $f \in \B(X, \K)$, on pose :
+	\[ \boxed{ \mathcal N_{\infty} (f) = \sup_{x \in X} |f(x)|} \]
+	
+	\begin{fthme}[Norme uniforme]\mbox{~}\\
+	$\mathcal N_{\infty}$ est une norme, appelée la \textbf{norme uniforme}.
+	\end{fthme}
+	
+	Si $X = \N$, on note $\ell^\infty(\K) = \B(\N, \K)$. Pour $u \in \ell^\infty (\K)$, $\mathcal N_\infty (u) = \sup_{n\in \N} |u_n|$.
+	
+	\begin{rem}
+	En fait, $\mathcal F(X, \K)$ est une $\K$-algèbre et $\B(X, \K)$ en est une sous-algèbre. Pour $(f,g) \in \B(X, \K)^2$, pour $x \in X$, on a :
+		\begin{align*}
+		|(fg)(x)| &= |f(x) g(x)| \\
+		&= |f(x)||g(x)| \\
+		&\leq \underbrace{\mathcal N_\infty (f) \mathcal N_\infty (g)}_{\text{indépendant de } x}
+		\end{align*}
+	Ainsi, $\mathcal N_\infty (fg) \leq \mathcal N_\infty (f) \mathcal N_\infty (g)$. De plus, $\mathcal N_\infty (1_{\B(X, \K)}) = 1$. On dit alors que $\mathcal N_\infty$ est une \textbf{norme d'algèbre}.
+	\end{rem}	
+	\begin{fdef}[Norme d'algèbre]
+	Si $(A, +, \cdot, *)$ est une algèbre et $N$ une norme sur $A$, alors $N$ est une \textbf{norme d'algèbre} sur $A$ si, et seulement si :
+	\begin{itemize}
+	\item[4)] $\forall (x,y) \in A^2,\; N(x * y) \leq N(x) \cdot N(y)$ (sous-multiplicativité).
+	\item[5)] $N(1_A) = 1$.
+	\end{itemize}
+	\end{fdef}
+	
+	\item[5)] On note $\ell^1(\K) = \lbrace u \in \K^\N \;|\; \sum |u_n|$ converge $\rbrace$. $\ell^1(\K)$ est un sous-espace vectoriel de $\K^\N$, ou de $\ell^\infty(\K)$. Pour $u \in \ell^1(\K)$, on pose : $\mathcal N_1 = \sum_{n=0}^{+\infty} |u_n|$.
+	
+	$\mathcal N_1$ est une norme sur $\ell^1(\K)$, on l'appelle \textbf{norme naturelle} sur $\ell^1(\K)$.
+	
+	\item[6)] Sur $\mathcal C([a,b], \K)$, on pose : 
+	\[
+	\boxed{ \mathcal N_1(f) = \int_a^b |f(t)|\mathrm dt, \;\text{ et } \; \mathcal N_2(f) = \sqrt{\int_a^b |f(t)|^2 \mathrm dt} }
+	\]	
+	
+	$\mathcal N_1$ et $\mathcal N_2$ sont des normes.	
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item Sur $\mathcal{CM}([a,b], \K)$, $\mathcal N_1$ et $\mathcal N_2$ ne seraient que des semi-normes.
+	\item $\mathcal C([a,b], \K) \subset \B([a,b], \K)$, donc on peut aussi normer $\mathcal C([a,b], \K)$ par $\mathcal N_\infty $.
+	\end{itemize}
+	\end{rems}	
+	\end{itemize}
+	
+	\subsection{Distance associée à une norme}
+	Soit $(E,N)$ un espace vectoriel normé.
+	
+	\begin{fdef}[Distance d'un point à un autre]\mbox{~}\\
+	Pour $(x,y) \in E^2$, on définit la \textbf{distance} de $x$ à $y$ par : $d(x,y) = N(y-x)$.
+	
+	\noindent Alors, l'application $d$ vérifie les propriétés :
+	\begin{itemize}
+	\item[1)] $d(x,y) = 0 \;\Longleftrightarrow\; x = y$ (séparation).
+	\item[2)] $d(y,x) = d(x,y)$ (symétrie).
+	\item[3)] $d(x,z) \leq d(x,y) + d(y,z)$ (inégalité triangulaire).
+	\end{itemize}
+	
+	\noindent D'où aussi, $|d(x,y) - d(x,z)| \leq d(y,z)$.		
+	\end{fdef}
+	
+	\begin{fdef}[Distance à un ensemble]\mbox{~}\\
+	Pour $x \in E$ et $A \in \mathcal P(E) \setminus \lbrace \varnothing \rbrace$, on définit : $d(x, A) = \inf_{y\in A} d(x,y)$.
+	\end{fdef}
+	
+	\begin{fthme}
+	On a : $|d(x,A) - d(y,A)| \leq d(x,y)$.
+	\end{fthme}
+	
+	\begin{fdef}[Distance d'un ensemble à un autre]\mbox{~}\\
+	Pour $(A,B) \in \mathcal P(E) \setminus \lbrace \varnothing \rbrace^2$, on définit : $d(A,B) = \inf_{(x,y) \in A\times B} d(x,y)$.
+	\end{fdef}\newpage
+	
+	\subsection{Boules et sphères}
+	\begin{fdef}[Boules et sphères]\mbox{~}\\
+	Soit $a \in E$ et $r \in \R_+^*$. On définit la boule ouverte, boule fermée, sphère de centre $a$ et de rayon $r$ par, respectivement :
+	\begin{align*}
+	B(a,r) &= \lbrace x \in E \;|\; d(a,x) < r \rbrace \\
+	B'(a,r) &= \lbrace x \in E \;|\; d(a,x) \leq r \rbrace \\
+	S(a,r) &= \lbrace x \in E \;|\; d(a,x) = r \rbrace 
+	\end{align*}
+	\end{fdef}
+	
+	\underline{Cas particuliers :} Pour $a = 0$ et $r = 1$, on définit de la même manière la boule \textit{unité} ouverte, fermée, et la sphère \textit{unité}, en remplaçant $d(0,x)$ par $N(x)$.
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item Dans $(\R, |\cdot|)$, les boules fermées sont les segments, et les boules ouvertes sont les intervalles ouverts bornés.
+	\item Dans $(\C, |\cdot|)$, on dit disque plutôt que boule, et cercle plutôt que sphère.
+	\end{itemize}
+	\end{exs}
+	
+	\begin{fthme}
+	Toute boule est convexe.
+	\end{fthme}
+	
+	\subsection{Comparaisons de normes}
+	\begin{fdef}[Finesse et équivalence de normes]\mbox{~}\\
+	Soit $N$ et $N'$ deux normes sur $E$. Alors :
+	\begin{itemize}
+	\item $N$ est plus fine que $N'$ s'il existe $k \in \R_+^*$ tel que $N' \leq kN$.
+	\item $N$ est équivalente à $N'$ si chacune des deux est plus fine que l'autre, i.e. 
+	\[\exists (\alpha, \beta) \in \left( \R_+^* \right)^2, \; \alpha N \leq N' \leq \beta N.\]
+	On notera : $N \sim N'$.
+	\end{itemize}
+	\end{fdef}
+	
+	\begin{prop}
+	L'équivalence des normes est une relation d'équivalence sur l'ensemble des normes de $E$.
+	\end{prop}
+	
+	\begin{ex}
+	Les trois normes usuelles sur $\K^n$, $\mathcal N_1$, $\mathcal N_2$ et $\mathcal N_\infty$ sont équivalentes entre elles.
+	
+	En effet, $\mathcal N_\infty \leq \mathcal N_1 \leq n \mathcal N_\infty$, et $\mathcal N_\infty \leq \mathcal N_2 \leq \sqrt{n} \mathcal N_\infty$.
+	\end{ex}
+	
+	\begin{prop}
+	On suppose que $N \sim N'$. Alors : 
+	\begin{itemize}
+	\item Toute $N$-boule (i.e. boule définie par $N$) est incluse dans une $N'$-boule de même centre.
+	\item Toute $N$-boule contient une $N'$-boule de même centre.	
+	\end{itemize}
+	\end{prop}
+	
+	\begin{fthmefond}[\textcolor{red}{admis}] \mbox{~}\\
+	Dans un espace vectoriel de dimension finie, toutes les normes sont équivalentes.
+	\end{fthmefond}
+	
+	\section{Notions de base de topologie}
+	Soit $(E,N)$ un espace vectoriel normé.
+		\subsection{Ensembles et fonctions bornés}
+	\begin{fdef}[Ensemble borné]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. $A$ est \textbf{bornée} pour $N$ s'il existe $k \in \R_+$ tel que $\forall x \in A,\; N(x) \leq k$. On peut également dire que $A$ est bornée pour $N$ si $A$ est incluse dans une $N$-boule.
+	\end{fdef}
+	
+	\begin{fdef}[Fonction bornée]\mbox{~}\\
+	Soit $f : X \longrightarrow E$, où $X$ est quelconque. $f$ est \textbf{bornée} si $f(x)$ est bornée, i.e. $\exists k \in \R_+, \; \forall x \in X, \; N(f(x)) \leq k$.
+	\end{fdef}
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item Si $N \sim N'$, alors être borné pour $N$ équivaut à être borné pour $N'$. Donc en dimension finie, la notion est \textit{intrinsèque}.
+	\item On peut définir sur $\B(X,E)$ une norme uniforme, associée à $N$ par : $\mathcal N_\infty (f) = \sup_{x\in X} N(f(x))$. On voit facilement que si $N \sim N'$, alors $\mathcal N_\infty \sim \mathcal N'_\infty$. Donc, si $E$ est de dimension finie, toutes les normes sur $\B(X,E)$ sont équivalentes.
+	\end{itemize}
+	\end{rems}
+	
+		\subsection{Voisinages, ouverts, fermés}
+	\begin{fdef}[Voisinage]\mbox{~}\\
+	Soit $a \in E$ et $V \in \mathcal P(E)$. $V$ est un \textbf{voisinage} de $a$ si $V$ contient une boule de centre $a$ (ainsi, on a nécessairement $a \in V$). On notera $\mathcal V(a)$ l'ensemble des voisinages de $a$.
+	\end{fdef}
+	
+	\begin{prop}[Stabilité par sur-ensemble]
+	Si $V \in \mathcal V(a)$ et $V \subset W$, alors $W \in \mathcal V(a)$.
+	\end{prop}
+	
+	\begin{prop}[Stabilité par intersection finie]
+	Si $(V_1, \ldots, V_n) \in \mathcal V(a)^n$, alors $\bigcap_{i=1}^n V_i \in \mathcal V(a)$.
+	\end{prop} \newpage
+	
+	\begin{fdef}[Ouvert]\mbox{~}\\
+	Soit $\Omega \in \mathcal P(E)$. $\Omega$ est \textbf{ouvert} si $\Omega$ est voisinage de tous ses éléments. Ainsi, $\Omega$ est ouvert si, et seulement si, $\forall a \in \Omega,\; \Omega \in \mathcal V(a)$, ou encore si $\forall a \in \Omega, \; \exists r \in \R_+^*,\; B(a,r) \subset \Omega$.
+	\end{fdef}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item Toute boule ouverte est ouverte.
+	\item $\varnothing$ et $E$ sont ouverts.
+	\end{itemize}
+	\end{exs}
+	
+	\begin{fthme}\mbox{~}\\
+	Toute \textit{réunion} d'ouverts est un ouvert.\\	
+	Toute \textit{intersection \textbf{finie}} d'ouverts est un ouvert.
+	\end{fthme}
+	\begin{proof}
+	On pose $\Omega = \bigcup_{i\in I} \Omega_i$, où les $\Omega_i$ sont des ouverts pour $i \in I$. Soit $a \in \Omega$. Soit $i_0 \in I$ tel que $a \in \Omega_{i_0}$. 
+	
+	$\Omega_{i_0}$ est un ouvert, donc $\Omega_{i_0} \in \mathcal V(a)$. Puisque $\Omega_{i_0} \subset \Omega$, on a $\boxed{\Omega \in \mathcal V(a).}$
+	
+	Posons maintenant $\Omega = \bigcap_{i=1}^n \Omega_i$, où les $\Omega_i$ sont des ouverts pour $i \in I$. Soit $a \in \Omega$. On a alors, pour tout $i \in \llbracket 1, n \rrbracket$, $a \in \Omega_i$. Ainsi, $\forall i \in \llbracket 1, n \rrbracket,\; \Omega_i \in \mathcal V(a)$, donc $\boxed{\Omega \in \mathcal V(a).}$
+	\end{proof}
+	
+	\begin{cex}[Intersection infinie]
+	On a l'égalité suivante : 
+	\[\boxed{\bigcap_{n=1}^{+\infty} B\left( a, \frac{1}{n} \right) = \lbrace a \rbrace }\]
+	
+	Or $B\left(a, \frac{1}{n}\right)$ est ouvert pour tout $n \in \N$, mais $\lbrace a \rbrace$ n'est pas ouvert.
+	\end{cex}
+	
+	\begin{fdef}[Fermé]\mbox{~}\\
+	Soit $F \in \mathcal P(E)$. $F$ est \textbf{fermé} si $\complement_E(F) = E \setminus F = F^\complement$ est ouvert.
+	\end{fdef}
+	
+	\begin{ex}
+	Les singletons, les boules fermées, les sphères sont fermés.
+	\end{ex}
+	
+	\begin{rem}
+	$\varnothing$ et $E$ sont ouverts \textbf{et} fermés. On peut montrer que ce sont les seuls ouverts fermés de $E$.
+	\end{rem}
+	
+	\begin{fthme}\mbox{~}\\
+	Toute \textit{réunion \textbf{finie}} de fermés est un fermé.\\
+	Toute \textit{intersection} de fermés est fermée.
+	\end{fthme}
+	\begin{proof}
+	Il suffit de passer au complémentaire pour se ramener au théorème 4.4.
+	\end{proof}\newpage
+	
+	\subsection{Intérieur et adhérence}
+	\begin{fdef}[Intérieur]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. L'\textbf{intérieur} de $A$ est l'ensemble des éléments de $E$ dont $A$ est un voisinage. On le note $\interieur {A}$. Ainsi :
+	\[ x \in \interieur A \; \overset{\mathrm{def}}{\Longleftrightarrow} \; A \in \mathcal V(x)\]
+	\end{fdef}
+	
+	\begin{fthme}
+	$\interieur A$ est le plus grand ouvert inclus dans $A$. En particulier, $A$ est ouvert si, et seulement si, $A = \interieur A$.
+	\end{fthme}
+	
+	\begin{ex}
+	$\interieur {\wideparen{B'(a,r)}} = B(a,r)$.
+	
+	En effet, $B(a,r) \subset B'(a,r)$, d'une part, donc comme $B(a,r)$ est ouvert, on a $B(a,r) \subset \interieur {\wideparen{B'(a,r)}}$.
+	
+	D'autre part, soit $x \in \interieur {\wideparen{B'(a,r)}}$, on a par hypothèse un $\rho > 0$ tel que $B'(x,\rho) \subset B'(a,r)$. Si $x = a$, le résultat est évident. Sinon, on pose $y = x + \rho \frac{x-a}{N(x-a)}$. Par construction, $N(y-x) = \rho$. Donc $y \in B'(x,\rho)$. Donc $y \in B'(a,r)$. Par conséquent, $N(y-a) \overset{(*)}{\leq} r$. Or $y-a = \left( 1 + \frac{\rho}{N(x-a)} \right) (x-a)$, d'où $N(y-a) = N(x-a) + \rho$. Donc par $(*)$, $N(x-a) + \rho \leq r$, d'où : $N(x-a) \leq r - \rho < r$.
+	\end{ex}
+	
+	\begin{fdef}[Adhérence]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. L'\textbf{adhérence} de $A$ est l'ensemble des éléments de $E$ dont tous les voisinages rencontrent $A$ (i.e. ne sont pas disjoints). On le note $\overline A$. Ainsi :
+	\[ x \in \overline A \; \overset{\mathrm{def}}{\Longleftrightarrow} \; \forall V \in \mathcal V(x),\; A \cap V \neq \varnothing \]
+	\end{fdef}
+	
+	\begin{rem}
+	Dans la définition, on peut remplacer << tous les voisinages >> par << toute boule de centre $x$ >>.
+	\end{rem}
+	
+	\begin{prop}[Lien intérieur-adhérence]
+	On a les deux égalités :
+	\[\boxed{ \left( \overline{A} \right) ^\complement \underset{(1)}{=} \interieur{\wideparen{A^\complement}} \quad\text{ et réciproquement }\quad \left( \interieur A \right) ^\complement \underset{(2)}{=} \overline{A^\complement}.} \]
+	\end{prop}
+	
+	\begin{fthme}
+	$\overline A$ est le plus petit fermé contenant $A$. En particulier, $A$ est fermé si, et seulement si, $A = \overline A$.
+	\end{fthme}
+	
+	\begin{ex}
+	$\overline{B(a,r)} = B'(a,r).$
+	\end{ex}
+	
+	\begin{ex}
+	Dans $\R$, si $A$ est :
+	\begin{itemize}
+	\item non vide et majorée, alors $\sup A \in \overline A$.
+	\item non vide et minorée, alors $\inf A \in \overline A$.
+	\end{itemize}
+	\end{ex}
+	
+	\begin{fthme}
+	$x \in \overline A \; \Longleftrightarrow \; d(x,A) = 0$.
+	\end{fthme}
+	
+	\subsection{Frontière et densité}
+	\begin{fdef}[Frontière]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. La \textbf{frontière} de $A$ est l'ensemble $\partial A = \overline A \setminus \interieur A$.\\	
+	On a aussi $\partial A = \overline A \cap \left( \interieur A \right) ^\complement$, d'où : $\boxed{ \partial A = \overline A \cap \overline{A^\complement}. }$\\	
+	On en déduit en particulier que $\partial A$ est fermé.
+	\end{fdef}
+	
+	\begin{ex}
+	$\partial B(a,r) = \partial B'(a,r) = B'(a,r) \setminus B(a,r) = S(a,r)$.
+	\end{ex}
+	
+	\begin{fdef}[Densité]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. $A$ est \textbf{dense} dans $E$ si $\overline A = E$.\\
+	C'est-à-dire : $\forall x \in E,\; \forall r \in \R_+^*,\; A \cap B(x,r) \neq \varnothing$.\\
+	Ainsi, $A$ est dense dans $E$ si toute boule de $E$ rencontre $A$.
+	\end{fdef}
+	
+	\begin{ex}
+	$\Q$ et $\R \setminus \Q$ sont denses dans $R$.
+	\end{ex}
+	
+	\subsection{Rôle de la norme}
+	Toutes les notions des 4.2.2, 4.2.3 et 4.2.4 dépendent de la norme choisie. Mais, si $N \sim N'$, alors on sait que tout $N$-boule contient une $N'$-boule de même centre, et symétriquement toute $N'$-boule contient une $N$-boule de même centre. Donc tout $a \in E$ a les mêmes voisinages pour $N$ et pour $N'$. 
+	
+	Toutes les notions précédentes ont été définies à partir des voisinages : 
+	
+	\begin{figure}[!h]
+	\begin{center}
+	\begin{picture}(40,5)
+	\put(0,0){
+    \shortstack{\framebox{Voisinage}}}
+    \put(0,0){
+    \vector(-1,-1){9}}
+    \put(-13,-13){\shortstack{ \framebox{Ouvert} }}
+   	\put(-7.5,-14){
+   	\vector(0,-1){10}}
+   	\put(-13,-28){\shortstack{ \framebox{Fermé} }}
+   	
+	\put(10,-2){
+	\vector(0,-1){7.5}}   	
+	\put(2,-13){
+	\shortstack{\framebox{Intérieur}}}   	
+	\put(10,-15){
+	\vector(1,-1){9}}
+	
+	\put(19.5,0){
+    \vector(1,-1){9}}
+    \put(23,-13){\shortstack{ \framebox{Adhérence} }}
+    \put(33,-15){
+	\vector(-1,-1){9}}
+	\put(33,-15){
+	\vector(1,-1){9}}
+
+	\put(13,-28){\shortstack{ \framebox{Frontière} }}
+	\put(37,-28){\shortstack{ \framebox{Densité} }}
+	\end{picture}
+	\end{center}
+	\end{figure}
+	
+	\mbox{~}\\	\mbox{~}\\	\mbox{~}\\ \mbox{~}\\
+		
+	En conséquence, toutes les notions étudiées précédemment sont invariantes si on remplace $N$ par une norme équivalente. Elles sont intrinsèques en dimension finie.
+	
+	\subsection{Espace vectoriel normé produit}
+	Soit $(E_i, N_i)_{1\leq i\leq p}$ une famille d'espaces vectoriels normés, et $E = E_1 \times \cdots \times E_p$. Pour $x = (x_1, \ldots, x_p) \in E$, on pose : 
+	\[\boxed{ N(x) = \max_{i=1}^p N_i(x_i) }\]
+	
+	\begin{rem}
+	Si pour tout $i \in \llbracket 1, p \rrbracket$, $(E_i, N_i) = (\K, |\cdot|)$, alors $E = \K^p$ et $N = \mathcal N_{\infty}$.
+	\end{rem}
+	
+	\begin{prop}
+	$N$ est une norme sur $E$.
+	\end{prop}
+	
+	$N$ s'appelle \textbf{norme produit} des $N_i$. L'espace vectoriel normé $(E,N)$ s'appelle \textbf{espace vectoriel normé \emph{produit}} des $(E_i, N_i)$.
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item Les $(E_i, N_i)$ étant donnés, il sera sous-entendu que $E$ est muni de la norme $N$.
+	\item Si chaque $E_i$ est de dimension finie, $E$ l'est aussi, et $N$ est équivalente à n'importe quelle autre norme.
+	\end{itemize}
+	\end{rems}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit pour tout $i \in \llbracket 1, p \rrbracket$, $A_i \in \mathcal P(E_i)$. On pose $A = A_1 \times \cdots A_p \in \mathcal P(E)$.\\
+	Si chaque $A_i$ est ouvert (resp. fermé) dans $E_i$, alors $A$ est ouvert (resp. fermé) dans $E$.
+	\end{fthme}
+	
+	\begin{lemme}
+	Soit $a = (a_1, \ldots, a_p) \in E$ et $r \in \R_+^*$. Alors, $B(a,r) = B(a_1, r) \times \cdots \times B(a_p, r)$.
+	\end{lemme}
+	
+	\section{Suites dans un espace vectoriel normé}
+		\subsection{Suites convergentes}
+	\begin{fdef}[Convergence]\mbox{~}\\
+	Soit $(u_n) \in E^\N$ et $\ell \in E$. La suite $(u_n)$ \textbf{converge} vers $\ell$ si, et seulement si, la suite réelle $(N(u_n-\ell))$ converge vers 0. C'est-à-dire si :
+	\[ \forall \varepsilon \in \R_+^*,\; \exists n \in \N, \; \forall n \geq n_0,\; N(u_n-\ell) \leq \varepsilon \]
+	
+	Ou encore : $\forall \varepsilon \in \R_+^*,\; \exists n_0 \in \N, \; \forall n \geq n_0,\; u_n \in B'(\ell, \varepsilon)$.
+	
+	Ou encore : $\forall V \in \mathcal V(\ell), \; \exists n_0 \in \N,\; \forall n \geq n_0,\; u_n \in V$.
+	\end{fdef}
+	
+	\begin{fthme}[Unicité de la limite]\mbox{~}\\
+	Si $(u_n)$ converge, alors sa limite est unique.
+	\end{fthme}
+	\begin{proof}
+	Supposons que $(u_n)$ converge vers $\ell$ et $\ell'$. Alors par inégalité triangulaire : 
+	\[N(\ell - \ell') \leq \underbrace{N(\ell - u_n)}_{\longrightarrow 0} + \underbrace{N(u_n - \ell')}_{\longrightarrow 0}\]
+	
+	Par passage à la limite quand $n$ tend vers $+\infty$, on en déduit $\ell = \ell'$.
+	\end{proof}
+	
+	\paragraph{Rôle de la norme : } Convergence et limite dépendent de la norme. Mais, si $N$ est plus fine que $N'$, alors la convergence de $(u_n)$ vers $\ell$ pour $N$ entraîne sa convergence vers $\ell$ pour $N'$. Si $N \sim N'$, on a l'équivalence. Ainsi, en dimension finie, la convergence est intrinsèque.
+	
+	\begin{ex}[où la norme influe]
+	On se place dans $E = \mathcal C([a,b], \R)$ normé par $\mathcal N_\infty$ ou $\mathcal N_1$. On considère la suite de fonctions $(f_n)$ telle que $f_n(a) = 1$, $f_n$ est nulle sur $\left[ a + \frac{1}{n}, b \right]$ et $f_n$ est affine sur $\left[a, a + \frac{1}{n} \right]$. 
+	
+	Alors, $\mathcal N_\infty (f_n) = 1$, et $\mathcal N_1(f_n) = \frac{1}{2n} \longrightarrow 0$.
+	Ainsi, $f_n \longrightarrow 0$ pour $\mathcal N_1$, mais $(f_n)$ diverge pour $\mathcal N_\infty$.
+	\end{ex}
+	
+	\subsection{Propriétés élémentaires}
+	\begin{prop}
+	Une suite convergente est bornée.
+	\end{prop}
+	
+	\begin{prop}
+	Si $u_n \longrightarrow \ell$, alors $N(u_n) \longrightarrow N(\ell)$. 
+	\end{prop}
+	
+	\begin{prop}[Opérations]\mbox{~}\\
+	\begin{itemize}
+	\item Soit $((u_n), (v_n)) \in (E^\N)^2$ et $(\lambda, \mu) \in \K^2$. Si $u_n \longrightarrow \ell$ et $v_n \longrightarrow \ell'$, alors $\lambda u_n + \mu v_n \longrightarrow \lambda\ell + \mu\ell'$.
+	\item Soit $(\lambda_n) \in \K^\N$ et $(u_n) \in E^\N$. Si $\lambda_n \longrightarrow \alpha$ et $u_n \longrightarrow \ell$, alors $\lambda_n u_n \longrightarrow \alpha \ell$.
+	\end{itemize}
+	\end{prop}
+	
+	\begin{prop}[Suites coordonnées]\mbox{~}\\
+	Ici seulement, on pose $\dim E = p$ et $\B = (e_1, \ldots, e_p)$ une base de $E$. Soit $(u_n) \in E^\N$. Alors chaque $u_n$ se décompose dans $\B$ : 
+	\[\forall n \in \N, \; \boxed{u_n = \sum_{i=1}^p u_{n,i}e_i,} \quad u_{n,i} \in \K \]
+	
+	Les $p$ suites $(u_{n,i})_{n\in \N}$ s'appellent les \textbf{suites coordonnées} de $(u_n)$ dans $\B$. Soit $\ell = \sum_{i=1}^p \ell_i e_i \in E$. Alors :
+	\[ \boxed{u_n \longrightarrow \ell \;\Longleftrightarrow\; \forall i\in \llbracket 1, p \rrbracket, \; u_{n,i} \longrightarrow \ell_i} \]
+	\end{prop}
+	
+	\begin{ex}
+	Soit $(M_n) \in \mathcal M_{p,q}(\K)^\N$ et $L \in \mathcal M_{p,q}(\K)$. On a :
+	\[ M_n \longrightarrow L \;\Longleftrightarrow\; \forall (i,j) \in \llbracket 1, p \rrbracket \times \llbracket 1, q \rrbracket,\; M_n(i,j) \longrightarrow L(i,j) \]
+	\end{ex}
+	
+	\begin{prop}[Suites composantes]\mbox{~}\\
+	Ici, $(E, N)$ est l'espace vectoriel produit des $(E_i, N_i)_{1 \leq i \leq p}$. Soit $(u_n) \in E^\N$. Alors $u_n = (u_{n,1}, u_{n,2}, \ldots, u_{n,p})$ avec $u_{n,i} \in E_i$.
+	
+	Les $p$ suites $(u_{n,i})_{n\in \N}$ s'appellent les \textbf{suites composantes} de $(u_n)$. Soit $\ell = (\ell_1, \ldots, \ell_p) \in E$. Alors :
+	\[ \boxed{u_n \longrightarrow \ell \;\Longleftrightarrow\; \forall i\in \llbracket 1, p \rrbracket, \; u_{n,i} \longrightarrow \ell_i} \]
+	\end{prop} \newpage
+	
+	\subsection{Suites extraites et valeurs d'adhérence}
+	\begin{fdef}[Extraction]\mbox{~}\\
+	Une \textbf{extraction} (ou extractrice) est une application strictement croissante de $\N$ dans $\N$.
+	\end{fdef}
+	
+	\begin{prop}
+	Si $\varphi$ est une extraction, on a $\forall n \in \N,\; \varphi(n) \geq n$.
+	\end{prop}
+	\begin{proof}
+	Par récurrence : $\varphi(0) \in \N$ donc $\varphi(0) \geq 0$. Ensuite, si $\varphi(n) \geq n$, alors $\varphi(n+1) > \varphi(n) \geq n$, donc $\varphi(n+1) > n+1$.
+	\end{proof}
+	
+	\begin{fdef}[Suite extraite, sous-suite]\mbox{~}\\
+	Soit $(u_n)$ et $(v_n)$ deux suites d'un même ensemble. $(v_n)$ est une \textbf{sous-suite} ou \textbf{suite extraite} de $(u_n)$ s'il existe une extraction $\varphi$ telle que $\forall n \in \N,\; v_n = u_{\varphi(n)}$.
+	\end{fdef}
+	
+	\begin{fthme}
+	Si $(u_n)$ converge, alors toutes ses sous-suites convergent vers la même limite $\ell$ de $(u_n)$.
+	\end{fthme}
+	
+	\begin{fdef}[Valeur d'adhérence]\mbox{~}\\
+	Soit $(u_n) \in E^\N$ et $\lambda \in E$. $\lambda$ est une \textbf{valeur d'adhérence} de $(u_n)$ si :
+	\begin{itemize}
+	\item $\forall \varepsilon \in \R_+^*,\; \forall n_0 \in \N,\; \exists n \geq n_0, \; N(u_n-\lambda) \leq \varepsilon$, ou
+	\item $\forall V \in \mathcal V(\lambda), \; \forall n_0 \in \N, \; \exists n\geq n_0, \; u_n \in V$.
+	\end{itemize}
+	\end{fdef}
+	
+	\paragraph{Commentaire :} Pour $V \in \mathcal V(\ell)$, $u^{-1}(V) = \lbrace n \in \N,\; u_n \in V \rbrace$. Or pour $V$ fixé, la proposition << $\forall n_0 \in \N,\; \exists n\geq n_0,\; u_n \in V$ >> signifie exactement : << $u^{-1}(V)$ n'est pas majorée >>, ou encore, << $u^{-1}(V)$ est infinie >> (en tant que partie non majorée de $\N$). Ainsi :
+	\[ \lambda \text{ est valeur d'adhérence de } (u_n) \;\Longleftrightarrow\; \forall V \in \mathcal V(\lambda), \; u^{-1}(V) \text{ est infinie.} \]
+	
+	De même en étudiant la définition de la convergence, on montre que :
+	
+	\[ \ell = \lim u_n \;\Longleftrightarrow\; \forall V \in \mathcal V(\ell),\; \left[ u^{-1}(V) \right]^\complement \text{ est fini.} \]
+	
+	\begin{fthme}
+	$\lambda$ est valeur d'adhérence de $(u_n)$ si, et seulement si, il existe une suite extraite de $(u_n)$ qui converge vers $\lambda$.
+	\end{fthme}
+	
+	\begin{cons}
+	Une suite convergente a une unique valeur d'adhérence, qui est sa limite.
+	\end{cons}\newpage
+	
+	\subsection{Suites et topologie}
+	\begin{fthme}[Caractérisation séquentielle des points adhérents]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$ et $x \in E$. On a l'équivalence :
+	\[ x \in \overline A \;\Longleftrightarrow\; x \text{ est la limite d'une suite à termes dans } A.  \]
+	\end{fthme}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item Soit $A$ une partie non vide majorée de $\R$. Alors il existe une suite $(u_n)$ de $A$ qui converge vers $\sup A$.
+	\item Soit $A$ une partie non vide de $E$ et $x \in E$. On a définie : $d(x,A) = \inf_{y\in A} d(x,y)$. Il existe donc une suite $(y_n) \in A^\N$ telle que $d(x,y_n) \longrightarrow d(x,A)$ (appelée suite \textit{minimisante}).
+	
+	De même, si $(A,B) \in \left(\mathcal P(E) \setminus \lbrace 0 \rbrace\right)^2$, il existe deux suites $((x_n), (y_n)) \in A^\N \times B^\N$ telles que $d(x_n, y_n) \longrightarrow d(A,B)$.
+	\end{itemize}
+	\end{exs}
+	
+	\begin{fthme}[Caractérisation séquentielle de la densité]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. On a l'équivalence :
+	\[A \text{ est dense dans } E \;\Longleftrightarrow\; \forall x \in E,\; \exists (u_n) \in A^\N,\; u_n \longrightarrow x.\]
+	\end{fthme}
+	
+	\begin{ex}
+	Tout réel est limite d'une suite de rationnels.
+	\end{ex}
+	
+	\begin{fthme}[Caractérisation séquentielle des fermés]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. On a l'équivalence :
+	\[ A \text{ est fermé } \;\Longleftrightarrow\; \text{ toute suite d'éléments de } A \text{ qui \textbf{converge} dans } E \text{ a sa limite dans } A. \]
+	\end{fthme}
+	
+	\subsection{Séries vectorielles en dimension finie}
+		\subsubsection{Généralités}
+	Soit $(a_n) \in E^\N$. On définit comme dans le cas $E = \K$, les sommes partielles de $\sum a_n$, la convergence de $\sum a_n$ et en cas de convergence, la somme et les restes.
+	
+	On a toujours :
+	\begin{itemize}
+	\item la condition nécessaire de convergence : $a_n \longrightarrow 0$ ; 
+	\item la linéarité de la convergence et de la somme : si $\sum a_n$ et $\sum b_n$ convergent, alors $\sum (\alpha a_n + \beta b_n)$ converge ;
+	\item l'équivalence suite-série : la suite $(u_n)$ a même nature que la série $\sum (u_n - u_{n-1})$.
+	\end{itemize}
+	
+	\begin{prop}[Séries coordonnées]\mbox{~}\\
+	Soit $B = (e_i)_{1 \leq i \leq p}$ une base de $E$. Alors $a_n = \sum_{i=1}^p a_{n,i} e_i$.  Alors $\sum a_n$ converge si, et seulement si, chaque série $\sum a_{n,i}$ converge. Dans ce cas, on a : $\sum_{n=0}^{+\infty} a_n = \sum_{i=1}^p \left( \sum_{n=0}^{+\infty} a_{n,i} \right) e_i.$
+	\end{prop}
+	
+		\subsubsection{Convergence absolue}
+	\begin{prop}
+	Soit $N$ une norme sur $E$. Alors la nature de $\sum N(a_n)$ ne dépend pas de $N$.
+	\end{prop}
+	
+	\begin{fdef}[Convergence absolue]\mbox{~}\\
+	La série $\sum a_n$ converge \textbf{absolument} si, et seulement si, la série $\sum N(a_n)$ converge.
+	\end{fdef}
+	
+	\begin{fthme}
+	Une série absolument convergente est convergente.
+	\end{fthme}
+	
+	\begin{ex}[Séries géométriques matricielles]
+	On sait déjà que pour tout $q \in \K,\; \sum q^n$ converge si, et seulement si, $|q| < 1$. Soit maintenant $A \in \mathcal M_p(\K)$, que dire de la convergence de $\sum A^n$ ?
+	
+	Pour $p \in \N^*$ fixé :
+	\begin{itemize}
+	\item[1)] On pose $C = \lbrace A \in \mathcal M_p(\K) \;|\; \sum A^n$ converge absolument $\rbrace$. Alors $C \in \mathcal V(0)$.
+	\item[2)] Si $\sum A^n$ converge, alors : $ \begin{cases}
+												I_p - A \in GL_p(\K)\\
+												\sum_{k=0}^{+\infty} A^k = (I_p - A)^{-1}
+												\end{cases}$
+	\end{itemize}
+	\end{ex}
+	
+	\section{Limites et continuité}
+		\subsection{Étude locale}
+	Voir annexe.
+		\subsection{Continuité globale}
+			\subsubsection{Types de continuité}
+	Soit $(E,N)$ et $(E', N')$ deux espaces vectoriels normés et $A \in \mathcal P(E) \setminus \lbrace \varnothing \rbrace$. Soit également $f : A \longrightarrow E'$.
+	\begin{fdef}[Continuité]\mbox{~}\\
+	$f$ est \textbf{continue} sur $A$ si $f$ est continue en tout point de $A$, i.e. : 
+	\[ \forall x \in A,\; \forall \varepsilon \in \R_+^*,\; \exists \alpha \in \R_+^*, \; [(y\in A \;\text{ et } N(y-x) < \alpha) \Longrightarrow N(f(y) - f(x)) < \varepsilon]. \]
+	
+	\noindent Ou encore : $\forall \varepsilon \in \R_+^*,\; \forall x \in A,\; \exists \alpha \in \R_+^*, \; [(y\in A \;\text{ et } N(y-x) < \alpha) \Longrightarrow N'(f(y) - f(x)) < \varepsilon]$.
+	\end{fdef}
+	
+	On note $\mathcal C(A,E')$ l'ensemble des fonctions continues de $A$ dans $E'$.
+	\begin{prop}
+	$\mathcal C(A,E')$ est un sous-espace vectoriel de $\mathcal F(A, E')$.
+	
+	$\mathcal C(A,\K)$ est une sous-algèbre de $\mathcal F(A, \K)$.
+	\end{prop}
+	
+	\begin{fdef}[Continuité uniforme]\mbox{~}\\
+	$f$ est \textbf{uniformément continue} sur $A$ si :
+	\[ \forall \varepsilon \in \R_+^*,\; \exists \alpha \in \R_+^*, \; [(x,y) \in A^2 \; \text{ et } N(y-x) \leq \alpha) \Longrightarrow N'(f(y) - f(x)) \leq \varepsilon] \]
+	\end{fdef}
+	
+	On a évidemment : $f$ uniformément continue entraîne $f$ continue.
+	
+	\begin{cex}[pour la réciproque]
+	On considère $\app{f}{\R}{\R}{x}{x^2}$ : cette application est continue mais non uniformément continue.
+	\end{cex}
+	
+	\begin{fdef}[Caractère lipschitzien]\mbox{~}\\
+	Soit $k \in \R_+$. $f$ est \textbf{$\bm{k}$-lipschitzienne} pour $N$ et $N'$ si, et seulement si : 
+	\[ \forall (x,y) \in A^2, \; N'(f(x) - f(y)) \leq k N(x-y) \]
+	
+	\noindent $f$ est \textbf{lipschitzienne} s'il existe $k \in \R_+$ tel que $f$ est $k$-lipschitzienne.
+	\end{fdef}
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] $f$ est 0-lipschitzienne si, et seulement si, $f$ est constante.
+	\item[2)] Si $f$ est $k$-lipschitzienne, alors $k$ est un \textbf{rapport de Lipschitz} de $f$.
+	\item[3)] Si $f$ est lipschitzienne, alors elle possède toujours un plus petit rapport de Lipschitz qui est $k_0 = \sup_{\underset{x \neq y}{(x,y) \in A^2}} \left[ \frac{N'[f(y) - f(x)]}{N(y-x)} \right]$
+	\item[4)] Le caractère lipschitzien (mais \textbf{\textcolor{red}{PAS}} le caractère $k$-lipschitzien) est invariant par changement de normes équivalentes, donc intrinsèque en dimension finie.
+	\end{itemize}
+	\end{rems}
+	
+	\begin{fthme}
+	Si $f$ est lipschitzienne, alors $f$ est uniformément continue.
+	\end{fthme}
+	
+	\begin{cex}[pour la réciproque]
+	La fonction racine carrée est uniformément continue sur $\R_+$, mais n'est pas lipschitzienne.
+	
+	Montrons que $\forall (x,y) \in \R_+^2,\; |\sqrt y - \sqrt x| \overset{(*)}{\leq} \sqrt{|y-x|}$. On peut suppose sans restriction de généralité $y \geq x$. Alors :
+	\begin{align*}
+	(*) &\Longleftrightarrow\; |\sqrt y - \sqrt x |^2 \leq |y-x| \\
+	&\Longleftrightarrow\; y + x - 2 \sqrt x \sqrt y \leq y - x \\
+	&\Longleftrightarrow\; 2x \leq 2 \sqrt x \sqrt y \\
+	&\Longleftrightarrow\; x \leq \sqrt x \sqrt y,
+	\end{align*}
+	ce qui est vrai. Donc $(*)$ est vraie.
+	
+	Soit $\varepsilon \in \R_+^*$. En posant $\alpha = \varepsilon^2$, on remarque que $\sqrt{|y - x|} \leq \varepsilon \;\Longrightarrow \; |y-x| \leq \alpha$, donc $\sqrt \cdot$ est uniformément continue sur $\R_+$.
+	
+	Enfin, supposons par l'absurde qu'il existe $k \in \R_+$ tel que $\forall (x,y) \in \R_+^2,\; |\sqrt x - \sqrt y | \leq k|x-y|$. Alors on a en particulier quand $y = 0$, $\forall x \in \R_+,\; \sqrt x \leq kx$ donc $\forall x \in \R_+,\; 1 \leq k\sqrt x$. Par passage à la limite quand $x$ tend vers $0$, on obtient : $1 \leq 0$, contradiction. Ainsi, $\sqrt \cdot$ n'est pas lipschitzienne.
+	\end{cex}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] La norme $N$ vue comme application de $E$ dans $\R$ est $1$-lipschitzienne pour $N$ et $|\cdot|$. En particulier, $N$ est continue pour elle-même.
+	\item[2)] Soit $A \in \mathcal P(E) \setminus \lbrace \varnothing \rbrace$. Soit $\app{d_A}{E}{\R}{x}{d(x,A)}$. On a vu que $\forall (x,y) \in E^2,\; |d_A(x) - d_A(y)| \leq N(x-y)$, donc $d_A$ est $1$-lipschitzienne pour $N$ et $|\cdot|$. En particulier, $d_A$ est continue sur $E$.
+	\item[3)] Soit $f \in \mathcal C^1([a,b], \R)$. Alors $f$ est $\mathcal N_{\infty}(f')$-lipschitzienne (inégalité des accroissements finis).
+	\end{itemize}
+	\end{exs}
+	
+			\subsubsection{Continuité des applications linéaires}
+	\begin{fthme}\mbox{~}\\
+	Soit $u \in \mathcal L(E, E')$. On a l'équivalence :
+	\[ u \text{ est continue } \;\Longleftrightarrow\;\; \exists C \in \R_+,\; \forall x \in E,\; N'(u(x)) \leq CN(x) \]
+	\end{fthme}
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] La preuve montre que pour $u \in \mathcal L(E,E')$, $u$ est continue en $0_E$ si, et seulement si, $u$ est continue, si et seulement si, $u$ est lipschitzienne.
+	\item[2)] Soit $S$ la sphère unité de $E$. Alors :
+	\[ \forall x \in E,\; N'(u(x)) \leq CN(x) \;\Longleftrightarrow\; \forall x \in S, \; N'(u(x)) \leq C\]
+	\end{itemize}
+	\end{rems}
+	
+	On peut ainsi reformuler le théorème :
+	\[ \boxed{ u \text{ est continue} \;\Longleftrightarrow\; u \text{ est bornée sur la sphère unité de } E. } \]
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] Ici, on considère $(E,N)$ l'espace vectoriel normé produit des $(E_i, N_i)_{1 \leq i \leq p}$. Les applications \textit{composantes} $\app{\gamma_i}{E}{E_i}{x}{x_i}$ sont continues.
+	\item[2)] On se place dans $E = \mathcal C([a,b], \R)$. Alors la forme linéaire $\app{\mathrm{ev}_a}{E}{\R}{f}{f(a)}$ est continue pour $\mathcal N_{\infty}$, mais discontinue pour $\mathcal N_1$.
+	\end{itemize}
+	\end{exs}
+	
+	On notera $\mathcal L_c(E,E')$ l'ensemble des applications linéaires continues de $E$ dans $E'$. C'est un sous-espace vectoriel de $\mathcal L(E,E')$. On notera de même $\mathcal L_c(E) \overset{\mathrm{not}}{=} \mathcal L_c(E,E')$ qui est une sous-algèbre de $\mathcal L(E)$. Enfin, on notera $E' = \mathcal L_c(E, \K)$ l'ensemble des formules linéaires continues. C'est le \textbf{dual topologique} de $E$. C'est un sous-espace vectoriel du dual algébrique $E* = \mathcal L(E,\K)$ de $E$.
+	
+	\begin{fthme}
+	Si $E$ est de dimension finie, toutes les applications linéaires définies sur $E$ sont continues.
+	\end{fthme}
+	
+	\begin{ex}
+	Soit $A \in \mathcal M_{n,p}(\K)$. L'application $\app{}{\mathcal M_{n,p}(\K)}{\mathcal M_{n,q}(\K)}{M}{AM}$ est linéaire, donc continue. En particulier, si $(M_n) \in \mathcal M_{p,q}(\K)^\N$ et que $M_n \longrightarrow L$, alors $AM_n \longrightarrow AL$.
+	\end{ex}
+	
+			\subsubsection{Fonctions polynomiales et rationnelles}
+	Dans cette partie, on pose $\dim E = p$. Soit $\B$ une base de $E$, on a déjà défini les \textit{les formes linéaires coordonnées} dans $\B$, qui sont les applications $\app{\varphi_i}{E}{\K}{x}{x_i}$. Alors les $\varphi_i$ sont continues. Ainsi, d'après les théorèmes généraux :
+	\begin{itemize}
+	\item toute fonction polynomiale en les coordonnées dans la base $\B$ (i.e. combinaison linéaire de produits de $\varphi_i$) est continue sur $E$ ;
+	\item toute fonction rationnelle en les coordonnées dans la base $\B$ est continue sur son ensemble de définition.
+	\end{itemize}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] L'application $\app{\det}{\mathcal M_n(\K)}{\K}{M}{\det M}$ est polynomiale en les $m_{i,j}$ (i.e. les coordonnées de $M$ dans la base canonique), donc est continue.
+	\item[2)] L'inversion matricielle $\app{\Inv}{GL_n(\K)}{\mathcal M_n(\K)}{M}{M^{-1}}$ est continue. 
+	
+	En effet, il suffit de montrer que chaque fonction coordonnée l'est. Or pour $(i,j) \in \llbracket 1, n \rrbracket ^2,\; \left( M^{-1} \right)_{i,j} = \frac{\Gamma_{j,i}}{\det M}$, où $\Gamma_{j,i}$ est le cofacteur de coordonnées $(j,i)$. C'est alors une fonction rationnelle en les $m_{i,j}$, elle est donc continue.
+	\end{itemize}
+	\end{exs}
+	
+			\subsubsection{Continuité des applications multilinéaires}
+	Ici, $(E,N)$ est l'espace vectoriel normé produit des $(E_i, N_i)_{1 \leq i \leq p}$. Soit $B : E \longrightarrow E'$ $p$-linéaire.
+	
+	\begin{fthme}\mbox{~}\\
+	$B$ est continue si, et seulement si, il existe $C \in \R_+$ telle que : $\forall x \in E,\; N'(B(x)) \leq C \prod_{i=1}^p N_i(x_i)$.
+	\end{fthme}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] La multiplication externe $\app{}{\K \times E}{E}{(\lambda, x)}{\lambda x}$ est bilinéaire, et $N(\lambda x) = |\lambda| N(x)$, donc elle est continue.
+	\item[2)] Sur $E$ préhilbertien, muni de sa norme euclidienne, le produit scalaire $\app{\langle \cdot | \cdot \rangle}{E \times E}{\K}{(x,y)}{\langle x | y \rangle}$ est bilinéaire, et par inégalité de Cauchy-Schwarz, $|\langle x | y \rangle | \leq ||x||||y||$, donc $\langle \cdot | \cdot \rangle$ est continue.
+	\end{itemize}
+	\end{exs}
+	
+	\begin{fthme}
+	Si chaque $E_i$ est de dimension finie, toute application $p$-linéaire définie sur $E$ est continue.
+	\end{fthme}
+	
+	\begin{exs}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] Le déterminant dans une base $\app{\det}{E^p}{\K}{x = (x_1, \ldots, x_p)}{\det_\B (x_1, \ldots, x_p)}$ est $p$-linéaire, donc continue.
+	\item[2)] La multiplication des matrices $\app{}{\mathcal M_{n,p}(\K) \times \mathcal M_{p,q}(\K)}{\mathcal M_{n,q}(\K)}{(M,N)}{MN}$ est bilinéaire donc continue.
+	\item[3)] Soit $(A,+, *, \cdot)$ une $\K$-algèbre de dimension finie. La multiplication interne $\app{}{A \times A}{A}{(x,y)}{x * y}$ est bilinéaire donc continue. On en déduit que pour toute norme $N$ sur $A$, il existe une constante $C \in \R_+$ telle que $N(x*y) \leq C N(x) N(y)$.
+	\end{itemize}
+	\end{exs}
+	
+			\subsubsection{Continuité et topologie}
+	\begin{fdef}[Ouvert et fermés relatifs]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. Un ouvert (resp. un fermé) \textbf{relatif} de $A$ est une partie de la forme $A \cap \Omega$ (resp. $A \cap F$), où $\Omega$ est un ouvert (resp. $F$ un fermé) de $E$.
+	\end{fdef}
+	
+	\begin{rem}
+	Si $A$ est un ouvert (resp. un fermé), alors un ouvert (resp. un fermé) relatif de $A$ est un ouvert (resp. un fermé) inclus dans $A$.
+	\end{rem}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $A \in \mathcal P(E)$ et $f \in \mathcal C(A, E')$.
+	\begin{itemize}
+	\item[1)] Pour tout ouvert $\Omega'$ de $E'$, $f^{-1}(\Omega')$ est un ouvert relatif de $A$.
+	\item[2)] Pour tout fermé $F'$ de $E'$, $f^{-1}(F')$ est un fermé relatif de $A$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{ex}
+	L'ensemble $GL_n(\K)$ des matrices $n\times n$ inversibles est un ouvert de $\mathcal M_n(\K)$. En effet, $GL_n(\K) = \det \!\!\!\!~^{-1}\left( \K \setminus \lbrace 0 \rbrace \right)$. Comme $\det$ est continue et que $\K \setminus \lbrace 0 \rbrace$ est un ouvert de $\K$, $GL_n(\K)$ est ouvert.
+	
+	Plus généralement, si $f \in \mathcal C(E,E')$, pour tout $c \in E'$, on a 
+	\begin{itemize}
+	\item $f^{-1}(\lbrace c \rbrace)$ est un fermé de $E$.
+	\item $f^{-1}(E' \setminus \lbrace c \rbrace)$ est un ouvert de $E$.
+	\end{itemize}
+	\end{ex}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $(f,g) \in \mathcal C(A,E')^2$, et $D \subset A$ où $D$ est dense dans $A$. Alors :
+	\[ \restriction{f}{D} = \restriction{g}{D} \;\Longrightarrow\; f = g \]
+	\end{fthme}
+	
+			\subsubsection{Connexité par arcs}
+	\begin{fdef}[Chemin]\mbox{~}\\
+	Un \textbf{chemin} de $E$ est une application continue de $[0,1]$ dans $E$.
+	\end{fdef}
+	
+	\begin{fdef}[Connexité par arcs]\mbox{~}\\
+	Soit $C \in \mathcal P(E)$. $C$ est \textbf{connexe par arcs} si pour tout $(a,b) \in C^2$, il existe un chemin $\gamma$ tel que : $\begin{cases}
+									 \gamma(0) = a \\
+									 \gamma(1) = b \\
+									 \gamma\left([0,1]\right) \subset C
+									 \end{cases}$
+									 
+	\noindent$\gamma$ est un chemin qui joint $a$ et $b$ dans $C$.
+	\end{fdef}
+	
+	\begin{ex}
+	Si $C$ est convexe, alors $C$ est connexe par arcs : il suffit de prendre $\gamma(t) = (1-t)a + tb$.
+	\end{ex}
+
+	\begin{fdef}[Partie étoilée]\mbox{~}\\
+	$C \in \mathcal P(E)$ est \textbf{étoilée} s'il existe $c \in C$ tel que $\forall x \in C,\; [c,x] \subset C$.
+	\end{fdef}
+	
+	On a alors : si $C$ est étoilée, alors $C$ est connexe par arcs. En effet, on joint $a$ et $b$ en passant par $c$.
+	
+	\begin{fthme}
+	Dans $\R$, les parties connexes par arcs sont $\varnothing$ et les intervalles.
+	\end{fthme}
+	
+	\begin{fthme}
+	Soit $f \in \mathcal C(C,E')$ où $C \in \mathcal P(E)$.
+	
+	Si $C$ est connexe par arcs, alors $f(C)$ l'est aussi.
+	\end{fthme}
+	
+	\begin{fthme}[TVI généralisé]\mbox{~}\\	
+	\textbf{(H)} Soit $f \in \mathcal C(C,\R)$ où $C \in \mathcal P(E) \setminus \lbrace \varnothing \rbrace$ est connexe par arcs. \\
+	\textbf{(C)} $f(C)$ est un intervalle.
+	\end{fthme}
+	
+	\begin{ex}
+	Soit $B$ une boule de $\mathcal M_n(\R)$. L'ensemble $\lbrace \det M \;|\; M \in B \rbrace$ est un intervalle de $\R$ car $\det$ est continue, et $B$ est convexe donc connexe par arcs.
+	\end{ex} \newpage
+	
+	\section{Compacité}
+		\subsection{Ensembles compacts}
+	\begin{fdef}[Ensemble compact]\mbox{~}\\
+	Soit $A \in \mathcal P(E)$. $A$ est \textbf{compact} si toute suite de $A^\N$ possède une valeur d'adhérence dans $A$. De manière équivalente, $A$ est compact si toute suite de $A^\N$ possède une sous-suite qui converge dans $A$.
+	\end{fdef}
+	
+	C'est une notion invariante par changement de norme équivalente, donc intrinsèque en dimension finie.
+	
+	\begin{fthme}
+	Si $A$ est un ensemble compact, alors $A$ est fermé et borné.
+	\end{fthme}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $A$ un compact et $B \subset A$ un fermé. Alors, $B$ est compact.
+	\end{fthme}
+	
+	\begin{fthme}
+	Une union finie de compacts est compacte.
+	\end{fthme}
+	
+	\begin{cons}
+	Toute partie finie de $E$ est compacte, en tant que réunion fermée de singletons qui sont compacts.
+	\end{cons}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $(E,N)$ l'espace vectoriel normé produit des $(E_i, N_i)_{1 \leq i \leq p}$. Soit $A_i$ un compact de $E_i$, et on pose $A = A_1 \times \cdots \times A_p \in E$.
+	
+	\noindent Alors, $A$ est compact.
+	\end{fthme}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $A$ un compact et $(u_n) \in A^\N$. On a l'équivalence :
+	\[ (u_n) \text{ converge} \;\Longleftrightarrow\; (u_n) \text{ n'a qu'une valeur d'adhérence} \]
+	\end{fthme}
+	
+	\begin{fthme}[Compacts de $\K$]
+	Les compacts de $\K$ sont les fermés bornés.
+	\end{fthme}
+	
+	\begin{ex}
+	Dans $\R$, les segments sont compacts. Dans $\C$, les disques fermés et les cercles (par exemple $\mathbb U$) sont compacts.
+	\end{ex}
+	
+		\subsection{Compacité et continuité}
+	Soit $(E,N)$ et $(E',N')$ deux espaces vectoriels normés.
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $A$ une partie compacte de $E$ et $f \in \mathcal C(A,E')$.\\
+	Alors $f(A)$ est compact.
+	\end{fthme}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $A$ un compact de $E$ non vide, et $f \in \mathcal C(A,\R)$.\\
+	Alors $f$ possède un minimum et un maximum.
+	\end{fthme}
+	
+	\begin{fthme}[de Heine]\mbox{~}\\
+	Soit $A$ un compact de $E$ et $f \in \mathcal C(A,E')$.\\
+	Alors $f$ est uniformément continue.
+	\end{fthme}
+	
+	\subsection{Preuve de l'équivalence des normes en dimension finie}
+	Soit $E$ un $\K$-espace vectoriel de dimension $p$. 
+	
+	Tout d'abord, il suffit de prouver le théorème sur $\K^p$. En effet, soit $\varphi$ un isomorphisme de $\K^p$ sur $E$. Si $N$ est une norme sur $E$, alors \textbf{$\bm{N \circ \varphi}$ est une norme sur $\bm{\K^p }$} :
+	\begin{itemize}
+	\item $(N \circ \varphi)(x) = 0 \Longrightarrow \varphi(x) = 0 \Longrightarrow x = 0$ par injectivité de $\varphi$.
+	\item $(N \circ \varphi)(\lambda x) = N(\varphi(\lambda x)) = N(\lambda \varphi(x)) = |\lambda|(N\circ \varphi)(x)$.
+	\item $(N \circ \varphi)(x+y) = N[\varphi(x) + \varphi(y)] \leq (N\circ \varphi)(x) + (N \circ \varphi)(y)$.
+	\end{itemize}
+	
+	Supposons le théorème démontré sur $\K^p$. Soit $N$ et $N'$ deux normes sur $E$. $N \circ \varphi$ et $N' \circ \varphi$ sont deux normes sur $\K^p$, donc elles sont équivalentes, d'où l'existence de $(\alpha, \beta) \in \left( \R_+^* \right)^2$ tels que $\alpha (N \circ \varphi) \leq N' \circ \varphi \leq \beta (N \circ \varphi)$. Ainsi, $\forall x \in \K^p,\; \alpha N(\varphi(x)) \leq N'(\varphi(x)) \leq \beta N(\varphi(x))$, ce qui devient par \textbf{surjectivité} de $\varphi$ : 
+	\[ \forall y \in E, \; \alpha N(y) \leq N'(y) \leq \beta N(y) \]
+	
+	\textbf{Ainsi, on a bien $N \sim N'$.}
+	
+	Ensuite, il suffit de montrer que toute norme sur $\K^p$ est équivalente à la norme $\mathcal N_\infty$ canonique. On se place dans l'espace vectoriel normé $(\K^p, \mathcal N_\infty)$. Soit $B'_\infty$ sa boule unité fermée et $S_\infty$ sa sphère unité. Alors :
+	\begin{align*}
+	B'_\infty &= \lbrace x \in \K^p \;|\; \mathcal N_\infty(x) \leq 1 \rbrace \\
+	&= \lbrace x \in \K^p \;|\; \forall i \in \llbracket 1, p \rrbracket, \; |x_i| \leq 1 \rbrace
+	\end{align*}
+	Si $\K = \R$, alors $B'_\infty = [-1,1]^p$. Si $\K = \C$, alors $B'_\infty = [D'(0,1)]^p$. Or on sait que $[-1,1]$ (resp. $D'(0,1)$) est un compact de $\R$ (resp. de $\C$). Alors, comme un produit cartésien de compacts est compact, on en déduit que \textbf{$\bm{B'_\infty}$ est compacte.}
+	
+	$B'_\infty$ est compacte, et $S_\infty$ est un fermé inclus dans $B'_\infty$, donc \textbf{$\bm{S_\infty}$ est un compact.} Soit $N$ une norme quelconque sur $\K^p$. $N$ est continue de $(\K^p, \mathcal N_\infty)$ dans $\R$ : en effet, soit $(x,y) \in (\K^p)^2$, on a :
+	\begin{align*}
+	|N(x) - N(y)| &\leq N(x-y) \quad \text{ inégalité triangulaire pour } N \\
+	&= N\left[ \sum_{i=1}^p (x_i - y_i) \varepsilon_i \right] \quad (\varepsilon_i)_{1\leq i\leq p} \text{ la base canonique} \\
+	&\leq \sum_{i=1}^p |x_i - y_i| N(\varepsilon_i) \\
+	&\leq \left[ \sum_{i=1}^p N(\varepsilon_i)\right] \mathcal N_\infty(x - y)
+	\end{align*}	
+	On obtient donc que $N$ est lipschitzienne, donc en particulier \textbf{continue}.
+	
+	Donc $\restriction{N}{S_\infty}$ a un minimum $\alpha$ et un maximum $\beta$. Mais sur $S_\infty$, $N(x) > 0$ car $0 \notin S_\infty$. \textbf{Donc $\bm{\alpha > 0}$.}
+	
+	On a donc : $\forall x \in S_\infty,\; 0 < \alpha \leq N(x) \leq \beta$. Pour $x \in \K^p \setminus \lbrace 0 \rbrace$, $\frac{x}{\mathcal N_\infty (x)} \in S_\infty$, donc :
+	\begin{align*}
+	&\;\;\qquad 0 < \alpha \leq N\left( \frac{x}{\mathcal N_\infty (x)} \right) \leq \beta \\
+	&\Longleftrightarrow\; \alpha \leq \frac{N(x)}{\mathcal N_\infty (x)} \leq \beta \\
+	&\Longleftrightarrow\; \alpha \mathcal N_\infty(x) \leq N(x) \leq \beta \mathcal N_\infty (x)
+	\end{align*}
+	Et cette inégalité reste vraie pour $x = 0$, ainsi, comme $\alpha > 0$ et $\beta > 0$, on a :
+	\[ \alpha \mathcal N_\infty \leq N \leq \beta \mathcal N_\infty\]
+	
+	D'où : 
+	\[\boxed{ N \sim \mathcal N_\infty}\]
+	
+	\subsection{Complément sur la dimension finie}
+	\begin{fthme}[Bolzano-Weierstrass]\mbox{~}\\
+	Soit $E$ un $\K$-espace vectoriel de dimension finie.\\
+	Toute suite bornée de $E$ possède une valeur d'adhérence (ou une sous-suite convergente).
+	\end{fthme}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $E$ un $\K$-espace vectoriel de dimension finie.\\
+	Les compacts de $E$ sont \textbf{les} fermés bornés.
+	\end{fthme}
+	
+	\begin{ex}
+	En dimension finie, toute boule fermée, toute sphère est compacte.
+	\end{ex}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $E$ un $\K$-espace vectoriel de dimension finie, et $(u_n)$ une suite \textbf{bornée} de $E$.\\
+	Si $(u_n)$ n'a qu'une valeur d'adhérence, alors $(u_n)$ converge.
+	\end{fthme}
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $(E,N)$ un espace vectoriel normée quelconque. Soit $F \subset E$ un sous-espace vectoriel de dimension finie.\\
+	Alors $F$ est fermé dans $E$. En particulier, si $E$ est de dimension finie, tous les sous-espaces vectoriels de $E$ sont fermés.
+	\end{fthme}
+	
+\chapter{Suites et séries de fonctions}
+	Dans ce chapitre, on considèrera $A$ un ensemble non vide, $F$ un $\K$-espace vectoriel de dimension finie, et $||\cdot||$ une norme sur $F$.
+	
+	\section{Convergence simple (ou ponctuelle)}
+	\begin{fdef}[Convergence simple, limite simple]\mbox{~}\\
+	Soit $(f_n)$ une suite de fonctions de $A$ dans $F$. $(f_n)$ \textbf{converge simplement} sur $A$ si pour chaque $x \in A$, la suite $(f_n(x))$ converge dans $F$.
+	
+	\noindent Dans ce cas, on peut définir $\app{f}{A}{F}{x}{\lim_{n \to +\infty} f_n(x)}$. $f$ est la \textbf{limite simple} de $(f_n)$.
+	\end{fdef}
+	
+	On dira que $(f_n)$ converge simplement vers $f$ sur $A$, et on note : $f_n \ls{A} f$. En résumé :
+	\[ \boxed{ f_n \ls{A} f \; \overset{\mathrm{def}} \Longleftrightarrow \; \forall x \in A, \; f_n(x) \limite{n}{+\infty} f(x) } \]
+	
+	\paragraph{Propriétés qui passent à la limite simple :} 
+	\begin{itemize}
+	\item La croissance : si chaque $f_n$ est croissante et si $f_n \ls A f$, alors $f$ est croissante.
+	\item La convexité : si chaque $f_n$ est convexe et si $f_n \ls A f$, alors $f$ est convexe.
+	\item La $T$-périodicité \textbf{pour $\bm{T}$ fixé}.
+	\item Le caractère $k$-lipschitzien \textbf{pour $\bm{k}$ fixé}.
+	\end{itemize}
+	
+	\noindent Dans d'autre cas, la convergence simple ne permet pas le passage à la limite :
+	\begin{itemize}
+	\item Le caractère borné : considérons $\app{f_n}{\R_+^*}{\R}{x}{\frac{n}{1+nx}}$.
+	
+	Chaque $f_n$ est bornée car $0 \leq f_n(x) \leq n$, mais $f_n \ls{\R_+^*} \left( f : x \longmapsto \frac{1}{x} \right)$ qui n'est pas bornée.
+	
+	\item La continuité : considérons $\app{f_n}{[0,1]}{\R}{x}{x^n}$.
+	
+	Alors $f_n \ls{[0,1]} \delta$ telle que $\delta(x) = \begin{cases}
+														 1 &\text{ si } x = 1\\
+														 0 &\text{ si } x \in [0,1[
+														 \end{cases}$.
+	Ainsi, chaque $f_n$ est continue, mais $\delta$ est discontinue.
+	
+	\item L'intégrale. On définit $f_n$ de la manière suivante : $f_n(0) = 0$, $f_n$ est nulle sur $\left[ \frac{2}{n}, 1 \right]$, $f_n \left( \frac{1}{n} \right) = n^2$ et $f_n$ est affine sur $\left[ 0, \frac{1}{n} \right]$ et sur $\left[ \frac{1}{n}, \frac{2}{n} \right]$. 
+	
+	Alors, $f_n \ls{[0,1]} 0$, mais $\int_0^1 f_n = n \limite{n}{+\infty} +\infty$.
+	\end{itemize}
+		
+	\section{Convergence uniforme}
+		\subsection{La définition}
+	\begin{fdef}[Convergence uniforme, limite uniforme]\mbox{~}\\
+	$(f_n)$ \textbf{converge uniformément} vers $f$ sur $A$ si:
+	\[ \forall \varepsilon \in \R_+^*,\; \exists N \in \N, \; \forall x \in A,\; \forall n\geq N, \; ||f_n(x) - f(x) || \leq \varepsilon \]
+	
+	\noindent On dit que $f$ est la \textbf{limite uniforme} de $(f_n)$, et on écrit : $f_n \lu{A} f$.
+	\end{fdef}
+	
+	\begin{rem}
+	On a la suite d'équivalences :
+	\begin{align*}
+	f_n \lu{A} f \; &\Longleftrightarrow\; f_n - f \lu{A} 0 \quad (x \mapsto 0_F)\\
+	&\Longleftrightarrow\; ||f_n - f|| \lu{A} 0 \quad (x \mapsto 0_\R),
+	\end{align*}
+	où $||f_n - f||$ désigne la fonction $\app{}{A}{\R}{x}{||f_n(x) - f(x)||}$.
+	\end{rem}
+	
+		\subsection{Lien avec la norme uniforme}
+	Supposons d'abord que les $f_n$ et $f$ sont bornées. Alors :
+	\[ f_n \lu{A} f \;\Longleftrightarrow\; \underbrace{ \forall \varepsilon \in \R_+^*,\; \exists N \in \N, \; \forall n \geq N,\; \underbrace{\forall x \in A, \; ||f_n(x) - f(x) || \leq \varepsilon}_{\mathcal N_\infty (f_n - f) \leq \varepsilon}}_{\underbrace{\mathcal N_\infty(f_n-f) \limite{n}{+\infty} 0}_{f_n \limite{n}{+\infty} f \text{ dans } (\B(A,F), \;\mathcal N_\infty)}}\]
+	
+	Ainsi, dans $\B(A,F)$, la convergence uniforme est la convergence pour la norme uniforme.
+	
+	\begin{ex}
+	On considère $\app{f_n}{[0,1]}{\R}{x}{x^n}$. On a vu que $f_n \ls{[0,1]} \delta$ telle que $													\delta(x) = \begin{cases}
+														 1 &\text{ si } x = 1\\
+														 0 &\text{ si } x \in [0,1[
+														 \end{cases}$.
+														 
+	$f_n$ et $\delta$ sont bornées, et $f_n(x) - \delta(x) = \begin{cases}
+															 x^n &\text{ si } x \in [0,1[\\
+															 0 &\text{ si } x = 1
+															 \end{cases}$.
+															 
+	On en déduit : $\mathcal N_\infty(f_n - \delta) = 1 \notlimite{n}{+\infty} 0$. Donc, la convergence n'est pas uniforme.
+	\end{ex}
+	
+	Dans le cas général, supposons que $f_n \lu {A} f$. Alors d'après la définition, $\bm{f_n - f}$ \textbf{est bornée à partir d'un certain rang}. D'où la propriété suivante :
+	\begin{prop}
+	On suppose que $f_n \lu {A} f$. Alors :
+	\begin{itemize}
+	\item Si $f_n$ est bornée à partir d'un certain rang, alors $f$ est bornée.
+	\item Si $f$ est bornée, alors à partir d'un certain rang $f_n$ est bornée.
+	\end{itemize}
+	\end{prop}
+	
+	\begin{ex}
+	Considérons $\app{f_n}{\R_+^*}{\R}{x}{\frac{n}{1+nx}}$. On a vu que $f_n \ls{\R_+^*} \left( f : x \longmapsto \frac{1}{x} \right)$.
+	
+	On a donc $f_n$ bornée, mais $f$ ne l'est pas. Donc la convergence n'est pas uniforme.
+	\end{ex}
+	
+\hr
+	
+	En conclusion :
+	
+	\[ \boxed{ f_n \lu{A} f \;\Longleftrightarrow\; \begin{cases}
+											\text{À partir d'un certain rang, } f_n - f \text{ est bornée.} \\
+											\mathcal N_\infty(f_n - f) \limite{n}{+\infty} 0.
+											\end{cases}}	\]
+	
+		\subsection{Premiers résultats}
+	\begin{prop}
+	Si $\begin{cases}
+		  f_n \lu A f \\
+		  g_n \lu A g
+		  \end{cases}$, alors $\lambda f_n + \mu g_n \lu A \lambda f + \mu g$.
+	\end{prop}
+	
+	\begin{prop}
+	On suppose que $f_n \lu A f$. Soit $\varphi \in \B(A, \K)$. Alors $\varphi f_n \lu A \varphi f$.
+	\end{prop}
+	
+	\begin{prop}[Caractérisation séquentielle de la convergence uniforme]\mbox{~}\\
+	On suppose que $f_n \lu A f$. Alors on a :
+	\[ \forall (x_n) \in A^\N,\; f_n(x_n) - f(x_n) \limite{n}{+\infty} 0 \]
+	\end{prop}
+	
+	\begin{prop}[Critère usuel de convergence uniforme]
+	On a l'équivalence suivante :
+	\[\boxed{f_n \lu A f \;\Longleftrightarrow\; \begin{cases}
+		\text{À partir d'un certain rang, } \forall x \in A,\; ||f_n(x) - f(x) || \leq \varepsilon_n \\
+		\varepsilon_n \limite{n}{+\infty} 0
+		\end{cases}}\]
+	\end{prop}
+	
+	\subsection{Deux exemples}
+	\begin{itemize}
+	\item[1)] \underline{Un cas d'école :} $\app{f_n}{\R_+}{\R}{x}{xn^{-x}}$. Il est évident que $f_n \ls{\R_+} 0$. Mais la convergence est-elle uniforme ?
+	
+	Ici, on va pouvoir calculer $\mathcal N_\infty(f_n)$ par étude de fonction. En effet, $f'_n(x) = n^{-x} - x(\ln n)n^{-x} = n^{-x}(1 - x\ln n)$.
+	
+	On remarque que $f_1$ n'est pas bornée. La fonction $f_n$ est croissante sur $\left] -\infty , \frac{1}{\ln n} \right[$ et décroissante sur $\left] \frac{1}{\ln n}, +\infty \right[$. Elle admet le tableau de variation suivant :
+
+	\begin{center}
+	\begin{tikzpicture}
+	\tkzTabInit{$x$ /1, $f(x)$ /1}{$0$, $\frac{1}{\ln n}$, $+\infty$}
+	\tkzTabVar{- / $0$, + /, - / $0$}
+	\end{tikzpicture}
+	\end{center}
+	
+	On calcule donc : $\mathcal N_\infty(f_n) = f_n \left( \frac{1}{\ln n} \right) = \frac{1}{\ln n} \cdot n^{-\frac{1}{\ln n}} = \frac{1}{e \ln n}$. Ainsi, $\mathcal N_\infty(f_n) \limite{n}{+\infty} 0$, et donc :
+	\[\boxed{f_n \lu{\R_+} 0.}\]
+	
+	\item[2)] On considère $\app{f_n}{\R}{\R}{x}{n\sin\left( \frac{x}{n} \right)}$.
+	
+	À $x$ fixé, $f_n(x) \limite{n}{+\infty} x$, donc $f_n \ls \R \id_\R$. La convergence est-elle uniforme ?
+	
+	\underline{Méthode 1 :} On remarque que chaque $f_n$ est bornée, mais que $\id_\R$ ne l'est pas. Donc la convergence n'est pas uniforme.
+	
+	\underline{Méthode 2 :} On trouve $(x_n) \in \R^\N$ telle que $f_n(x_n) - f(x_n) \notlimite{n}{+\infty} 0$.
+	
+	Prenons $x_n = n\pi$. Alors $f_n(n\pi) - n\pi = n\pi \notlimite{n}{+\infty} 0$. Donc la convergence n'est pas uniforme.
+	
+	\underline{Poursuivons tout de même :} $f_n(x) - x = n\left( \sin\left( \frac{x}{n} \right) - \frac{x}{n} \right)$. Or $\forall t \in \R,\; |\sin(t) - t| \leq \frac{|t|^3}{6}$ (inégalité de Taylor-Lagrange à l'ordre 2 entre 0 et $t$).
+	
+	Donc $|f_n(x) - x| \leq \frac{n}{6}	 \left|\frac{x}{n}\right|^3 = \frac{|x|^3}{6n^2}$. Mais soit $A \in \R_+^*$, on a : $\forall n \in \N,\; \forall x \in [-A, A],\; |f_n(x) - x| \leq \frac{A^3}{6n^2} \limite{n}{+\infty} 0$. On en déduit :
+	\[ \forall A \in \R_+^*,\; f_n \lu{[-A, A]} \id_\R \]
+	
+	Ainsi, $f_n \lu{X} \id_\R$ si, et seulement si, $X$ est un segment.
+	\end{itemize}
+	
+	\section{Convergence d'une série de fonctions}
+	On considère ici $u_n : A \longrightarrow F$.
+		\subsection{Convergence simple}
+	\begin{fdef}[Convergence simple d'une série de fonctions]\mbox{~}\\
+	La série $\sum u_n$ \textbf{converge simplement} si pour tout $x \in A$, la série $\sum u_n(x)$ converge.
+	
+	\noindent On peut alors définir :
+	\[ \text{La somme } \app{S}{A}{F}{x}{\sum_{n=0}^{+\infty} u_n(x)} \text{ et les restes }  \app{R_n}{A}{F}{x}{\sum_{k=n+1}^{+\infty} u_k(x)} \]
+	\end{fdef}
+	
+	De même que pour les suites de fonctions, on écrira $\sum u_n \ls A S$, où $S = \sum_{n=0}^{+\infty} u_n$.
+	
+	\begin{rem}
+	Si $\sum u_n$ converge simplement sur $A$, alors $u_n \ls A 0$ et $R_n \ls A 0$.
+	\end{rem}
+	
+	\begin{prop}
+	Si on pose $U_n = \sum_{k=0}^n u_k$, alors : $\sum u_n$ converge simplement sur $A$ si, et seulement si, $(U_n)$ converge simplement sur $A$.
+	\end{prop}
+	
+	\subsection{Convergence uniforme}
+	\begin{fdef}[Convergence uniforme d'une série de fonctions]\mbox{~}\\
+	La série $\sum u_n$ \textbf{converge uniformément} sur $A$ si $(U_n)$ converge uniformément sur $A$.
+	
+	\noindent En particulier, la convergence uniforme de $\sum u_n$ entraîne sa convergence simple.
+	\end{fdef}
+	
+	\begin{prop}
+	Si $\sum u_n$ converge uniformément sur $A$, alors $u_n \lu A 0$.
+	\end{prop}
+	
+	\begin{fthme}\mbox{~}\\
+	On a les équivalences suivantes :
+	\begin{align*}
+	\sum u_n \text{ converge uniformément sur } A \;&\Longleftrightarrow\; \begin{cases}
+																			\sum u_n \text{ converge simplement sur } A \\
+																			R_n \lu A 0
+																		   \end{cases} \\
+	&\Longleftrightarrow\; \begin{cases}
+							\sum u_n \text{ converge simplement sur } A \\
+							\text{La convergence de } R_n \text{ vers 0 est uniforme}
+							\end{cases}
+	\end{align*}
+	\end{fthme}
+	
+	\begin{ex}[Séries de Riemann alternées]
+	On considère $\app{u_n}{\R_+^*}{\R}{x}{\frac{(-1)^n}{n^x}}$. 
+	
+	On sait que $\sum u_n$ converge simplement sur $\R_+^*$ par théorème des séries alternées. Ensuite, $|u_n(x)| = \frac{1}{n^x}$, donc $\mathcal N_\infty (u_n) = 1$, donc $(u_n)$ ne converge pas uniformément vers 0 sur $\R_+^*$. À fortiori, $\sum u_n$ ne converge pas uniformément sur $\R_+^*$.
+	
+	Poursuivons : par théorème des séries alternées, $|R_n(x)| \leq \frac{1}{(n+1)^x}$. Fixons $a > 0$ : pour $x \geq a$, $|R_n(x)| \leq \frac{1}{(n+1)^a}$, qui est indépendant de $x$ et tend vers 0 quand $n$ tend vers $+\infty$.
+	
+	Donc $R_n \lu{[0, +\infty[} 0$. Donc $\sum u_n$ converge uniformément sur $[a, +\infty[$ pour tout $a > 0$.
+	\end{ex}
+	
+	\newpage
+	
+	\subsection{Convergence normale}
+	\begin{fdef}[Convergence normale]\mbox{~}\\
+	La série $\sum u_n$ \textbf{converge normalement} sur $A$ si à partir d'un certain rang, $u_n$ est bornée, et que $\sum \mathcal N_\infty (u_n)$ converge.
+	\end{fdef}
+	
+	\begin{fthme}\mbox{~}\\
+	Si $\sum u_n$ converge normalement sur $A$, alors :
+	\begin{itemize}
+	\item $\sum u_n$ converge simplement absolument sur $A$ i.e. $\forall x \in A,\; \sum u_n(x)$ converge absolument.
+	\item $\sum u_n$ converge uniformément sur $A$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{prop}[Critère usuel de convergence normale]
+	On a l'équivalence suivante :
+	\[\boxed{ \sum u_n \text{ converge normalement sur } A \;\Longleftrightarrow\; \begin{cases}
+		\text{À partir d'un certain rang, } \forall x \in A, \; ||u_n(x)|| \leq a_n\\
+		\sum a_n \text{ converge}
+	   \end{cases} }\]
+	\end{prop}
+	
+	\begin{ex}
+	Reprenons $u_n(x) = \frac{(-1)^n}{n^x}$ sur $[\alpha, +\infty[$ avec $0 < \alpha \leq 1$. On a vu que $\sum u_n$ converge uniformément sur $[\alpha, +\infty[$. Mais $\sup_{x \in [\alpha, +\infty[} |u_n(x)| = \frac{1}{n^\alpha}$ qui est le \textbf{terme général d'une série \emph{divergente}} car $\alpha \in ]0,1]$. Donc, la convergence n'est pas normale sur $[\alpha, +\infty[$. Elle le serait cependant si $\alpha > 1$.
+	\end{ex}
+	
+	\begin{ex}
+	Soit $(f_n)$ une suite de fonctions quelconque de $\R$ dans $\R$. On pose $u_n(x) = \frac{1}{n^2}\sin (f_n(x))$. Alors $||u_n(x)|| \leq \frac{1}{n^2}$, \textbf{terme général d'une série \emph{convergente} indépendant de $\bm{x}$}. Donc $\sum u_n$ converge normalement sur $\R$.
+	\end{ex}
+	
+	\section{Convergence uniforme et passages aux limites}
+		\subsection{Continuité}
+	On considère toujours $F$ et $||\cdot||$ comme précédemment, et $A \in \mathcal P(E)$ où $E$ est un espace vectoriel normé de dimension finie.
+	
+	\begin{fthme}\mbox{~}\\
+	Soit $(f_n)$ une suite de $\mathcal F(A,F)$. On suppose que $f_n \lu A f$. Alors :
+	\begin{itemize}
+	\item[(a)] On fixe $a \in A$. Si chaque $f_n$ est continue en $a$, $f$ l'est aussi.
+	\item[(b)] Si chaque $f_n$ est continue, $f$ l'est aussi.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{fdef}[Voisinage relatif]\mbox{~}\\
+	Soit $A$ une partie non vide de $E$ et $a \in E$. $V$ est un \textbf{voisinage relatif} de $a$ dans $A$ si, et seulement si, il est de la forme $A \cap V'$ où $V' \in \mathcal V(a)$. On écrira alors : $V \in \mathcal V_A(a)$.
+	\end{fdef}
+	
+	\begin{rems}\mbox{~}\\
+	\begin{itemize}
+	\item[1)] Dans (a), il suffit en fait que $f_n \lu V f$, où $V \in \mathcal V_A(a)$. En effet dans ce cas, le théorème appliqué aux $\restriction{f_n}{V}$ donne la continuité en $a$ de $\restriction{f}{V}$. Ceci équivaut alors à la continuité en $a$ de $f$ (caractère local de la continuité).
+	\item[2)] Dans (b), il suffit que $(f_n)$ converge localement uniformément vers $f$ i.e. $\forall a \in A,\; \exists V \in \mathcal V_A(a),\; f_n \lu V f$.
+		\begin{ex}
+		Soit $A$ un intervalle de $\R$. On suppose les $f_n$ continues sur $A$. Alors si $(f_n)$ converge uniformément vers $f$ \textit{sur tout segment} de $A$, $f$ est continue sur $A$.
+		\end{ex}
+	\item[3)] Par contraposée, le théorème peut s'utiliser pour montrer qu'une convergence simple n'est pas uniforme ($f_n$ continues et $f$ discontinue).
+	\item[4)] Interprétation topologique : par caractérisation séquentielle des fermés on sait que $\B(A,F) \cap \mathcal C(A,F)$ est un fermé de $(\B(A,F),\; \mathcal N_\infty)$. Ainsi, lorsque $A$ est compact, $\mathcal C(A,F)$ est fermé dans $(\B(A,F), \; \mathcal N_\infty)$.
+	\end{itemize}
+	\end{rems}
+	
+	\begin{fthme}[Version série du théorème 5.3]\mbox{~}\\
+	Soit $u_n : A \longrightarrow F$. On suppose que $\sum u_n \lu A S$. Alors :
+	\begin{itemize}
+	\item[a)] On fixe $a \in A$. Si chaque $u_n$ est continue en $a$, $S$ l'est aussi.
+	\item[b)] Si chaque $u_n$ est continue, $S$ l'est aussi.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{ex}[Continuité de $\zeta$]\mbox{~}\\
+	On pose $\forall x \in ]1, +\infty[,\; \zeta(x) = \sum_{n=1}^{+\infty} \frac{1}{n^x}$. On note $u_n(x) = \frac{1}{n^x}$. Chaque $u_n$ est continue sur $]1, +\infty[$. Soit alors $[a,b] \subset ]1, +\infty[$. Pour $x \in [a,b]$, on a $0 \leq u_n(x) \leq \frac{1}{n^a}$, terme général d'une série convergente indépendant de $x$.
+	
+	Ainsi, $\sum u_n$ converge normalement sur $[a,b]$, donc $\sum u_n$ converge uniformément sur tout segment de $]1, +\infty[$. \textbf{Donc $\bm{\zeta}$ est continue par convergence uniforme locale.}
+	
+	\underline{Digression :} Y a-t-il convergence uniforme sur $]1, +\infty[$ ? Il est facile de montrer qu'il n'y a pas convergence normale sur $]1, +\infty[$. Faisons une étude par les restes :
+	$R_n(x) = \sum_{k=n+1}^{+\infty} \frac{1}{k^x}$. On a :
+	\begin{align*}
+	R_n(x) &= \sum_{k=n+1}^{+\infty} \frac{1}{k^x}\\
+	&\geq \sum_{k=n+1}^{+\infty} \int_k^{k+1} \frac{1}{t^x}\mathrm dt \\
+	&= \int_{n+1}^{+\infty} \frac{\mathrm dt}{t^x} \\
+	&= \left[ - \frac{1}{(x-1)t^{x-1}}\right]_{n+1}^{+\infty} \\
+	&= \frac{1}{(x-1)(n+1)^{x-1}}
+	\end{align*}
+	
+	Ainsi, $R_n(x) \geq \frac{1}{(x-1)(n+1)^{x-1}}$. Or quand $x$ tend vers $1$, $\frac{1}{(x-1)(n+1)^{x-1}} \longrightarrow +\infty$. Donc $R_n(x) \limite{x}{1} +\infty$. Ainsi, aucune fonction $R_n$ n'est bornée, donc $(R_n)$ ne converge pas uniformément vers $0$ sur $]1, +\infty[$ : $\sum u_n$ ne converge pas uniformément sur $]1, +\infty[$.	
+	\end{ex}
+	
+		\subsection{Limites}
+	\begin{fthme}[Double limite, interversion des limites]\mbox{~}\\
+	\textbf{(H)} Soit $f_n : A \longrightarrow F$. Soit $a \in \overline A$, ou $ a = \pm \infty$ lorsque cela est possible.
+	
+	On suppose que $f_n \lu A f$, et que chaque $f_n$ admet en $a$ une limite $\ell_n \in F$.
+	
+	\noindent \textbf{(C)} La suite $(\ell_n)$ converge vers une limite $\ell \in F$, et $f$ admet $\ell$ pour limite en $a$. En résumé :
+	\[\boxed{ \lim_{x\to a} \underbrace{\left( \lim_{n\to +\infty} f_n(x) \right)}_{f(x)} = \lim_{n\to +\infty} \underbrace{\left( \lim_{x\to a} f_n(x) \right)}_{\ell_n} }\]
+	\end{fthme}
+	
+	\begin{fthme}[Sommation des limites]\mbox{~}\\
+	\textbf{(H)} Soit $u_n : A \longrightarrow F$. On choisit $a$ comme au théorème 5.5. On suppose que $u_n(x) \limite{x}{a} \lambda_n \in F$, et $\sum u_n \lu A S$.
+	
+	\noindent \textbf{(C)} $\sum \lambda_n$ converge et $S$ admet $\sum_{n=0}^{+\infty} \lambda_n$ pour limite en a. En résumé :
+	\[\boxed{ \lim_{x\to a} \underbrace{\left( \sum_{n=0}^{+\infty} u_n(x) \right)}_{S(x)} = \sum_{n=0}^{+\infty} \underbrace{ \left(\lim_{x\to a} u_n(x)\right)}_{\lambda_n}} \]
+	\end{fthme}
+	
+	\begin{rem}
+	Par le caractère local de la limite, pour les deux théorèmes, on peut remplacer la convergence uniforme sur $A$ par :
+	\begin{itemize}
+	\item la convergence uniforme sur un voisinage relatif de $a$ dans $A$ lorsque $a \in \overline A$,
+	\item la convergence uniforme sur un $A \cap [M, +\infty[$ si $a = +\infty$,
+	\item la convergence uniforme sur un $A \cap ]-\infty, M]$ si $a = -\infty$.
+	\end{itemize}
+	\end{rem}
+	
+	\begin{ex}
+	On revient à $u_n(x) = \frac{1}{n^x}$ sur $]1, +\infty[$. On sait que $\sum u_n \lu{]1,+\infty[} \zeta$, et $u_n(x) \limite{x}{1} \frac{1}{n}$. Mais $\sum \frac{1}{n}$ diverge, donc par contraposée du théorème de sommation des limites, la convergence de $\sum u_n$ n'est pas uniforme sur $]1, +\infty[$, ni même sur $]1, a]$ pour $a > 1$. (Cette preuve est beaucoup plus rapide que la précédente !)
+	\end{ex}
+	
+	\begin{ex}
+	Pour $x \in \R$, on pose $f(x) = \sum_{n=1}^{+\infty} \frac{\th (x^n)}{2^n}$.
+	
+	\underline{Justification :} On pose $u_n(x) = \frac{\th (x^n)}{2^n}$. On fixe $x \in \R$. On a $|u_n(x)| \leq \frac{1}{2^n}$, donc par comparaison, $\sum u_n(x)$ converge absolument, donc $f$ est bien définie. 
+	
+	Il se trouve que le majorant obtenu ne dépend pas de $x$, donc on a en même temps prouvé que $\sum u_n$ converge normalement donc uniformément sur $\R$.
+	
+	\underline{Continuité de $f$ :} Chaque $u_n$ étant continue par théorèmes généraux, $f$ est continue.
+	
+	\underline{Calcul de $\lim_{x\to \pm\infty} f$ :} On a $u_n(x) \limite{x}{+\infty} \frac{1}{2^n}$, et $u_n(x) \limite{x}{-\infty} \left( -\frac{1}{2} \right)^n$.
+	
+	Par le théorème 5.6 : $f(x) \limite{x}{+\infty} \sum_{n=1}^{+\infty} \left( \frac{1}{2} \right)^n = 1$ et $f(x) \limite{x}{-\infty} \sum_{n=1}^{+\infty} \left( -\frac{1}{2} \right)^n = - \frac{1}{3}$.
+	\end{ex}
+	
+		\subsection{Intégrales ordinaires et primitives}
+	\begin{fthme}\mbox{~}\\
+	Soit $(f_n) \in \mathcal{CM}([a,b], F)^\N$. On suppose que $f_n \lu{[a,b]} f \in \mathcal{CM}([a,b], F)$. Alors :
+	\[ \int_a^b f_n \limite{n}{+\infty} \int_a^b f \]
+	\end{fthme}
+	
+	\begin{fthme}[Intégration terme à terme]\mbox{~}\\
+	Soit $(u_n) \in \mathcal{CM}([a,b], F)^\N$. On suppose que $\sum u_n$ converge uniformément sur $[a,b]$ et que $\sum_{n=0}^{+\infty} u_n \in \mathcal{CM}([a,b], F)$. Alors :
+	\[ \int_a^b \sum_{n=0}^{+\infty} u_n = \sum_{n=0}^{+\infty} \int_a^b u_n \]
+	\end{fthme}
+	
+	\begin{ex}
+	Calculer $I = \int_0^{2\pi} e^{e^{it}}\mathrm dt$.
+	
+	On écrit $I = \int_{0}^{2\pi} \left( \sum_{n=0}^{+\infty} \frac{e^{int}}{n!} \right) \mathrm dt$. On note $u_n(t) = \frac{e^{int}}{n!}$, et on calcule $|u_n(t)| = \frac{1}{n!}$, terme général d'une série convergente indépendant de $t$. Alors, $\sum u_n$ converge normalement donc $\sum u_n$ converge uniformément sur $[0, 2\pi]$. On peut donc intégrer terme à terme :
+	\begin{align*}
+	I &= \sum_{n=0}^{+\infty} \left( \int_0^{2\pi} \frac{e^{int}}{n!}\mathrm dt \right) \\
+	&= \sum_{n=0}^{+\infty} \left(\frac{1}{n!} \underbrace{\int_0^{2\pi} e^{int}\mathrm dt}_{2\pi \delta_{n,0}}\right)\\
+	&= 2\pi
+	\end{align*}
+	\end{ex}
+	
+	\begin{fthme}\mbox{~}\\
+	\textbf{(H)} Soit $I$ un intervalle de $\R$. Soit $(f_n) \in \mathcal C(I, F)^\N$. On suppose que $(f_n)$ converge uniformément sur tout segment vers $f$. On notera $f \lusts f$. On fixe $a \in I$. 
+	
+	Soit $p_n$ la primitive de $f_n$ qui s'annule en $a$, et $p$ la primitive de $f$ qui s'annule en $a$.
+	
+	\noindent \textbf{(C)} $p_n \lusts p$.
+	\end{fthme}
+	
+	\begin{fthme}[Primitivation terme à terme]\mbox{~}\\
+	\textbf{(H)} Soit $(u_n) \in \mathcal C(I,F)^\N$. On suppose que $\sum u_n$ converge uniformément sur tout segment de $I$. Soit $a \in I$, et soit $p_n$ la primitive nulle en $a$ de $u_n$.
+	
+	\noindent \textbf{(C)} $\sum p_n$ converge uniformément sur tout segment, et $\sum_{n=0}^{+\infty} p_n$ est la primitive nulle en $a$ de $\sum_{n=0}^{+\infty} u_n$.
+	\end{fthme}
+	
+		\subsection{Dérivées}
+	\begin{fthme}\mbox{~}\\
+	\textbf{(H)} Soit $I$ un intervalle de $\R$. Soit $(f_n) \in \mathcal C^1(I,F)^\N$. On suppose que :
+	\[\begin{cases}
+		f_n \ls{I} g\\
+		f'_n \lusts g \in \mathcal C(I,F)
+	  \end{cases}\]
+	  
+	\noindent \textbf{(C)} \begin{itemize}
+	\item[1)] $f \in \mathcal C^1(I,F)$.
+	\item[2)] $f' = g$.
+	\item[3)] $f_n \lusts f$.
+	\end{itemize}
+	
+	Les conclusions 1 et 2 se réécrivent de la manière suivante : $\left( \lim_{n\to +\infty} f_n \right)' = \lim_{n\to +\infty} (f_n)'$.
+	\end{fthme}
+	
+	\begin{fthme}[Dérivation terme à terme]\mbox{~}\\
+	\textbf{(H)} Soit $(u_n) \in \mathcal C^1(I,F)^\N$. On suppose que $\sum u_n$ converge simplement sur $I$ et que $\sum u_n'$ converge uniformément sur tout segment de $I$.
+	
+	\noindent \textbf{(C)} \begin{itemize}
+	\item[1)] $\sum_{n=0}^{+\infty} u_n \in \mathcal C^1(I,F)$.
+	\item[2)] $\left( \sum_{n=0}^{+\infty} u_n \right)' = \sum_{n=0}^{+\infty} u_n'$.
+	\item[3)] $\sum u_n$ converge uniformément sur tout segment.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{fthme}\mbox{~}\\
+	\textbf{(H)} Soit $I$ un intervalle de $\R$ et $p \in \N^*$. Soit $(f_n) \in \mathcal C^p(I,F)^\N$. On suppose que :
+	\[\begin{cases}
+		\forall k\in \llbracket 0, p-1 \rrbracket,\; f_n^{(k)} \ls{I} g_k\\
+		f_n^{(p)} \lusts g_p
+	  \end{cases}.\]
+	On pose $f = g_0$.
+	
+	\noindent \textbf{(C)} \begin{itemize}
+	\item[1)] $f \in \mathcal C^p(I,F)$.
+	\item[2)] $\forall k \in \llbracket 0, p \rrbracket,\; f^{(k)} = g_k$.
+	\item[3)] $\forall k \in \llbracket 0, p-1 \rrbracket, \; f_n^{(k)} \lusts g_k$.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{fthme}[Dérivation terme à terme à l'ordre $k$]\mbox{~}\\
+	\textbf{(H)} Soit $(u_n) \in \mathcal C^p(I,F)^\N$. On suppose que pour tout $k \in \llbracket 0, p-1 \rrbracket$, $\sum u_n^{(k)}$ converge simplement sur $I$ et que $\sum u_n^{(p)}$ converge uniformément sur tout segment de $I$.
+	
+	\noindent \textbf{(C)} \begin{itemize}
+	\item[1)] $\sum_{n=0}^{+\infty} u_n \in \mathcal C^p(I,F)$.
+	\item[2)] $\forall k \in \llbracket 0, p \rrbracket, \;\left( \sum_{n=0}^{+\infty} u_n \right)^{(k)} = \sum_{n=0}^{+\infty} u_n^{(k)}$.
+	\item[3)] $\forall k \in \llbracket 0, p-1 \rrbracket, \; \sum u_n^{(k)}$ converge uniformément sur tout segment.
+	\end{itemize}
+	\end{fthme}
+	
+	\begin{ex}[Adaptation au cas $\mathcal C^{\infty}$]\mbox{~}\\
+	On pose $u_n(x) = \frac{1}{n^x}$. On veut montrer que $\zeta \in \mathcal C^{\infty}(]1, +\infty[, \R)$.
+	
+	On sait que chaque $u_n$ est $\mathcal C^\infty$ sur $]1, +\infty[$, et :
+	\[\forall k \in \N,\; \forall x \in ]1, +\infty[, \; u_n^{(k)} = \frac{(-\ln n)^k}{n^x}\]
+	
+	Soit $[a,b] \subset ]1,+\infty[$. Pour $x \in [a,b]$, $|u_n^{(k)}(x)| = \frac{|\ln n|^k}{n^x} \leq \frac{(\ln n)^k}{n^a}$. On fixe $\alpha \in ]1, a[$. Alors :
+	\[\frac{(\ln n)^k}{n^\alpha} = \frac{(\ln n)^k}{n^{a - \alpha}} \cdot \frac{1}{n^\alpha} = \mathrm o\left(\underbrace{\frac{1}{n^\alpha}}_{\text{TGSC}} \right)\]
+	
+	Donc : $\sum \frac{(\ln n)^k}{n^a}$ converge, et donc $\sum u_n^{(k)}$ converge normalement donc uniformément sur tout segment de $]1, +\infty[$. Alors, le théorème 5.14 s'applique pour tout $p \in \N^*$. On en déduit :
+	\[ \zeta \in \mathcal C^{\infty}(]1, +\infty[, \R) \quad\text{et}\quad \forall k \in \N,\; \forall x \in ]1, +\infty[,\; \zeta^{(k)}(x) = \sum_{n=1}^{+\infty} \frac{(-\ln n)^k}{n^x} \]
+	\end{ex}
+	
+	\section{Approximation uniforme sur un segment}
+		\subsection{Introduction}
+	On se place dans l'espace vectoriel normé $(\B([a,b], F), \; \mathcal N_\infty)$. Étant donnés $f \in \B([a,b], F)$ et $P \subset \B([a,b], F)$, on a équivalence entre les propositions suivantes :
+	
+	\begin{itemize}
+	\item[1)] $f \in \overline P$.
+	\item[2)] $f$ est uniformément approchable par des éléments de $P$ i.e. 
+	\[\forall \varepsilon \in \R_+^*,\; \exists \varphi \in P, \; \forall x \in [a,b], \; ||\varphi(x) - f(x) || \leq \varepsilon\]
+	
+	Ou encore : $\forall \varepsilon \in \R_+^*,\; \exists \varphi \in P,\; \mathcal N_\infty (\varphi - f) \leq \varepsilon$.
+	\item[3)] $f$ est limite uniforme sur $[a,b]$ d'une suite d'éléments de $P$ i.e.
+	\[\exists (\varphi_n) \in P^\N,\; \varphi_n \lu{[a,b]} f\]
+	\end{itemize}
+	
+		\subsection{Fonctions continues par morceaux et fonctions en escalier}
+	\begin{fdef}[Fonction en escalier]\mbox{~}\\
+	Une fonction $\varphi : [a,b] \longrightarrow F$ est \textbf{en escalier} s'il existe une subdivision $\sigma = (x_i)_{0\leq i\leq p}$ telle que $\restriction{\varphi}{]x_{i-1}, x_i[}$ est constante.
+	\end{fdef}
+	
+	\begin{prop}
+	$\mathcal E([a,b], F)$ est un sous-espace vectoriel de $\mathcal {CM}([a,b], F)$.
+	
+	$\mathcal E([a,b], \K)$ est une sous-algèbre de $\mathcal {CM}([a,b], \K)$.
+	\end{prop}
+	
+	\begin{fthme}
+	On a l'inclusion :
+	\[\mathcal{CM}([a,b], F) \subset \overline{\mathcal E([a,b], F)}\]
+	
+	\noindent C'est-à-dire : toute fonction continue par morceaux sur $[a,b]$ est uniformément approchable par des fonctions en escalier.
+	
+	\noindent Ou encore : toute fonction continue par morceaux sur $[a,b]$ est limite uniforme d'une suite de fonctions en escalier.
+	\end{fthme}
+	
+		\subsection{Fonctions continues et fonctions polynômiales}
+	
+	\begin{fthmead}[Weierstrass]
+	On a l'égalité :
+	\[ \overline{\mathrm{Pol}([a,b], \K)} = \mathcal C([a,b], \K) \]
+	
+	\noindent C'est-à-dire : toute fonction continue sur $[a,b]$ est uniformément approchable par des fonctions polynômiales, ou est limite uniforme d'une suite de fonctions polynômiales.
+	\end{fthmead}
+		
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

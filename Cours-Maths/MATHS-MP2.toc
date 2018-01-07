@@ -1,0 +1,117 @@
+\select@language {french}
+\contentsline {chapter}{\numberline {1}R\IeC {\'e}duction des matrices carr\IeC {\'e}es}{7}
+\contentsline {section}{\numberline {1.1}\IeC {\'E}l\IeC {\'e}ments propres}{7}
+\contentsline {subsection}{\numberline {1.1.1}D\IeC {\'e}finitions de base}{7}
+\contentsline {subsection}{\numberline {1.1.2}Premi\IeC {\`e}res propri\IeC {\'e}t\IeC {\'e}s}{8}
+\contentsline {subsection}{\numberline {1.1.3}Sous-espaces stables}{9}
+\contentsline {paragraph}{Interpr\IeC {\'e}tation matricielle : }{9}
+\contentsline {paragraph}{Retour aux \IeC {\'e}l\IeC {\'e}ments propres : }{9}
+\contentsline {subsection}{\numberline {1.1.4}\IeC {\'E}l\IeC {\'e}ments propres des matrices carr\IeC {\'e}es}{10}
+\contentsline {paragraph}{Lien avec les endomorphismes :}{10}
+\contentsline {section}{\numberline {1.2}Polyn\IeC {\^o}me caract\IeC {\'e}ristique}{11}
+\contentsline {subsection}{\numberline {1.2.1}Cas d'une matrice carr\IeC {\'e}e}{11}
+\contentsline {subsection}{\numberline {1.2.2}Cas particuliers}{12}
+\contentsline {paragraph}{Taille 2 : }{12}
+\contentsline {paragraph}{Taille 3 : }{12}
+\contentsline {paragraph}{Matrices triangulaires : }{12}
+\contentsline {subsection}{\numberline {1.2.3}Compl\IeC {\'e}ments}{12}
+\contentsline {subsection}{\numberline {1.2.4}Cas d'un endomorphisme (en dimension finie)}{13}
+\contentsline {paragraph}{Cas particulier : }{14}
+\contentsline {section}{\numberline {1.3}Polyn\IeC {\^o}mes d'endomorphismes et de matrices}{14}
+\contentsline {subsection}{\numberline {1.3.1}Structure d'alg\IeC {\`e}bre}{14}
+\contentsline {subsection}{\numberline {1.3.2}Action d'un polyn\IeC {\^o}me sur une alg\IeC {\`e}bre}{15}
+\contentsline {paragraph}{R\IeC {\'e}\IeC {\'e}criture des formules (1), (2) et (3) dans les cas du programme : }{16}
+\contentsline {subparagraph}{$\bm {A = \mathcal L(E)}$}{16}
+\contentsline {subparagraph}{$\bm {A = \mathcal M_p(\ensuremath {\mathbb {K}})}$}{16}
+\contentsline {subsection}{\numberline {1.3.3}Polyn\IeC {\^o}mes annulateurs}{16}
+\contentsline {subsection}{\numberline {1.3.4}Compl\IeC {\'e}ments}{18}
+\contentsline {subsubsection}{Polyn\IeC {\^o}mes et \IeC {\'e}l\IeC {\'e}ments propres}{18}
+\contentsline {subsubsection}{D\IeC {\'e}composition des noyaux}{18}
+\contentsline {section}{\numberline {1.4}Diagonalisation}{19}
+\contentsline {subsection}{\numberline {1.4.1}D\IeC {\'e}finition}{19}
+\contentsline {subsection}{\numberline {1.4.2}Diagonalisabilit\IeC {\'e} et sous-espaces propres}{19}
+\contentsline {subsection}{\numberline {1.4.3}Diagonalisabilit\IeC {\'e} et polyn\IeC {\^o}mes annulateurs}{20}
+\contentsline {subsection}{\numberline {1.4.4}Matrices diagonalisables}{21}
+\contentsline {section}{\numberline {1.5}Trigonalisation}{22}
+\contentsline {subsection}{\numberline {1.5.1}Endomorphismes}{22}
+\contentsline {subsection}{\numberline {1.5.2}Matrices trigonalisables}{23}
+\contentsline {subsection}{\numberline {1.5.3}Application \IeC {\`a} la nilpotence}{23}
+\contentsline {chapter}{\numberline {2}Compl\IeC {\'e}ments sur les s\IeC {\'e}ries num\IeC {\'e}riques}{25}
+\contentsline {section}{\numberline {2.1}R\IeC {\`e}gle de d'Alembert}{25}
+\contentsline {section}{\numberline {2.2}S\IeC {\'e}ries altern\IeC {\'e}es}{26}
+\contentsline {section}{\numberline {2.3}Comparaison s\IeC {\'e}rie-int\IeC {\'e}grale}{26}
+\contentsline {subsection}{\numberline {2.3.1}Les th\IeC {\'e}or\IeC {\`e}mes du programme}{26}
+\contentsline {subsection}{\numberline {2.3.2}Digression}{27}
+\contentsline {section}{\numberline {2.4}Sommation des relations de comparaisons}{28}
+\contentsline {section}{\numberline {2.5}\IeC {\'E}quivalence suite-s\IeC {\'e}rie}{29}
+\contentsline {section}{\numberline {2.6}Sommation des suites doubles}{30}
+\contentsline {subsection}{\numberline {2.6.1}Cas << tout est positif >>}{30}
+\contentsline {paragraph}{Conventions :}{30}
+\contentsline {subsection}{\numberline {2.6.2}Cas g\IeC {\'e}n\IeC {\'e}ral}{31}
+\contentsline {section}{\numberline {2.7}Produit de Cauchy (ou de convolution) }{31}
+\contentsline {chapter}{\numberline {3}Convexit\IeC {\'e}}{33}
+\contentsline {section}{\numberline {3.1}Ensembles convexes}{33}
+\contentsline {section}{\numberline {3.2}Fonctions convexes}{34}
+\contentsline {subsection}{\numberline {3.2.1}G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s}{34}
+\contentsline {subsection}{\numberline {3.2.2}Convexit\IeC {\'e} et taux d'accroissements}{35}
+\contentsline {subsection}{\numberline {3.2.3}Convexit\IeC {\'e} et d\IeC {\'e}riv\IeC {\'e}es}{36}
+\contentsline {subsection}{\numberline {3.2.4}Quelques in\IeC {\'e}galit\IeC {\'e}s de convexit\IeC {\'e}}{36}
+\contentsline {chapter}{\numberline {4}Espaces vectoriels norm\IeC {\'e}s}{37}
+\contentsline {section}{\numberline {4.1}Normes et distances}{37}
+\contentsline {subsection}{\numberline {4.1.1}Norme}{37}
+\contentsline {subsection}{\numberline {4.1.2}Exemples}{37}
+\contentsline {subsection}{\numberline {4.1.3}Distance associ\IeC {\'e}e \IeC {\`a} une norme}{39}
+\contentsline {subsection}{\numberline {4.1.4}Boules et sph\IeC {\`e}res}{40}
+\contentsline {subsection}{\numberline {4.1.5}Comparaisons de normes}{40}
+\contentsline {section}{\numberline {4.2}Notions de base de topologie}{41}
+\contentsline {subsection}{\numberline {4.2.1}Ensembles et fonctions born\IeC {\'e}s}{41}
+\contentsline {subsection}{\numberline {4.2.2}Voisinages, ouverts, ferm\IeC {\'e}s}{41}
+\contentsline {subsection}{\numberline {4.2.3}Int\IeC {\'e}rieur et adh\IeC {\'e}rence}{43}
+\contentsline {subsection}{\numberline {4.2.4}Fronti\IeC {\`e}re et densit\IeC {\'e}}{44}
+\contentsline {subsection}{\numberline {4.2.5}R\IeC {\^o}le de la norme}{44}
+\contentsline {subsection}{\numberline {4.2.6}Espace vectoriel norm\IeC {\'e} produit}{44}
+\contentsline {section}{\numberline {4.3}Suites dans un espace vectoriel norm\IeC {\'e}}{45}
+\contentsline {subsection}{\numberline {4.3.1}Suites convergentes}{45}
+\contentsline {paragraph}{R\IeC {\^o}le de la norme : }{46}
+\contentsline {subsection}{\numberline {4.3.2}Propri\IeC {\'e}t\IeC {\'e}s \IeC {\'e}l\IeC {\'e}mentaires}{46}
+\contentsline {subsection}{\numberline {4.3.3}Suites extraites et valeurs d'adh\IeC {\'e}rence}{47}
+\contentsline {paragraph}{Commentaire :}{47}
+\contentsline {subsection}{\numberline {4.3.4}Suites et topologie}{48}
+\contentsline {subsection}{\numberline {4.3.5}S\IeC {\'e}ries vectorielles en dimension finie}{48}
+\contentsline {subsubsection}{G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s}{48}
+\contentsline {subsubsection}{Convergence absolue}{49}
+\contentsline {section}{\numberline {4.4}Limites et continuit\IeC {\'e}}{49}
+\contentsline {subsection}{\numberline {4.4.1}\IeC {\'E}tude locale}{49}
+\contentsline {subsection}{\numberline {4.4.2}Continuit\IeC {\'e} globale}{49}
+\contentsline {subsubsection}{Types de continuit\IeC {\'e}}{49}
+\contentsline {subsubsection}{Continuit\IeC {\'e} des applications lin\IeC {\'e}aires}{51}
+\contentsline {subsubsection}{Fonctions polynomiales et rationnelles}{52}
+\contentsline {subsubsection}{Continuit\IeC {\'e} des applications multilin\IeC {\'e}aires}{52}
+\contentsline {subsubsection}{Continuit\IeC {\'e} et topologie}{53}
+\contentsline {subsubsection}{Connexit\IeC {\'e} par arcs}{54}
+\contentsline {section}{\numberline {4.5}Compacit\IeC {\'e}}{55}
+\contentsline {subsection}{\numberline {4.5.1}Ensembles compacts}{55}
+\contentsline {subsection}{\numberline {4.5.2}Compacit\IeC {\'e} et continuit\IeC {\'e}}{56}
+\contentsline {subsection}{\numberline {4.5.3}Preuve de l'\IeC {\'e}quivalence des normes en dimension finie}{56}
+\contentsline {subsection}{\numberline {4.5.4}Compl\IeC {\'e}ment sur la dimension finie}{57}
+\contentsline {chapter}{\numberline {5}Suites et s\IeC {\'e}ries de fonctions}{59}
+\contentsline {section}{\numberline {5.1}Convergence simple (ou ponctuelle)}{59}
+\contentsline {paragraph}{Propri\IeC {\'e}t\IeC {\'e}s qui passent \IeC {\`a} la limite simple :}{59}
+\contentsline {section}{\numberline {5.2}Convergence uniforme}{60}
+\contentsline {subsection}{\numberline {5.2.1}La d\IeC {\'e}finition}{60}
+\contentsline {subsection}{\numberline {5.2.2}Lien avec la norme uniforme}{60}
+\contentsline {subsection}{\numberline {5.2.3}Premiers r\IeC {\'e}sultats}{61}
+\contentsline {subsection}{\numberline {5.2.4}Deux exemples}{61}
+\contentsline {section}{\numberline {5.3}Convergence d'une s\IeC {\'e}rie de fonctions}{62}
+\contentsline {subsection}{\numberline {5.3.1}Convergence simple}{62}
+\contentsline {subsection}{\numberline {5.3.2}Convergence uniforme}{63}
+\contentsline {subsection}{\numberline {5.3.3}Convergence normale}{64}
+\contentsline {section}{\numberline {5.4}Convergence uniforme et passages aux limites}{64}
+\contentsline {subsection}{\numberline {5.4.1}Continuit\IeC {\'e}}{64}
+\contentsline {subsection}{\numberline {5.4.2}Limites}{66}
+\contentsline {subsection}{\numberline {5.4.3}Int\IeC {\'e}grales ordinaires et primitives}{67}
+\contentsline {subsection}{\numberline {5.4.4}D\IeC {\'e}riv\IeC {\'e}es}{68}
+\contentsline {section}{\numberline {5.5}Approximation uniforme sur un segment}{70}
+\contentsline {subsection}{\numberline {5.5.1}Introduction}{70}
+\contentsline {subsection}{\numberline {5.5.2}Fonctions continues par morceaux et fonctions en escalier}{70}
+\contentsline {subsection}{\numberline {5.5.3}Fonctions continues et fonctions polyn\IeC {\^o}miales}{70}
